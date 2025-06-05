@@ -1,5 +1,21 @@
+import { useState } from "react";
+
 function Post(props) {
-  const { _id, content, image } = props.post;
+  const { _id, content, image, comments = [], likes = 0 } = props.post;
+  const [ newComment, setNewComment ] = useState("");
+  const[showComment, setShowComment] = useState(false);
+  const [currentLikes, setCurrentLikes] = useState(Array.isArray(likes) ? likes.length : 0);
+  const [isLiked, setIsLiked] = useState(false);
+
+  const handleLike = () => {
+    const newLikeStatus = !isLiked;
+    setIsLiked(newLikeStatus);
+    setCurrentLikes(newLikeStatus ? currentLikes + 1: currentLikes - 1)
+  
+    console.log(`${newLikeStatus ? "Liking": "Unliking"} Post ${_id}`)
+
+  }
+
 
   return (
     <article key={_id}>
@@ -26,6 +42,21 @@ function Post(props) {
           />
         );
       })}
+    <div style={{ marginTop: '10px' }}>
+        <button 
+          onClick={handleLike}
+          style={{ 
+            background: isLiked ? '#ff6b6b' : '#f0f0f0',
+            border: 'none',
+            padding: '5px 10px',
+            borderRadius: '5px',
+            cursor: 'pointer'
+          }}
+        >
+          {isLiked ? '❤️ Liked' : '🤍 Like'}
+        </button>
+        <span style={{ marginLeft: '5px' }}>{currentLikes} likes</span>
+      </div>
     </article>
   );
 }
