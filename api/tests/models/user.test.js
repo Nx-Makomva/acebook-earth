@@ -8,6 +8,7 @@ describe("User model", () => {
 
   it("has an email address", () => {
     const user = new User({
+      name: "someone",
       email: "someone@example.com",
       password: "password",
     });
@@ -16,6 +17,7 @@ describe("User model", () => {
 
   it("has a password", () => {
     const user = new User({
+      name: "someone",
       email: "someone@example.com",
       password: "password",
     });
@@ -29,6 +31,7 @@ describe("User model", () => {
 
   it("can save a user", async () => {
     const user = new User({
+      name: "someone",
       email: "someone@example.com",
       password: "password",
     });

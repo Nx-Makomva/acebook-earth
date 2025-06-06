@@ -27,6 +27,7 @@ let userId
 describe("/posts", () => {
   beforeAll(async () => {
     const user = new User({
+      name: "someone",
       email: "post-test@test.com",
       password: "12345678",
       friends: [],
@@ -93,7 +94,7 @@ describe("/posts", () => {
     });
 
     test("a post is not created", async () => {
-      const response = await request(app)
+      await request(app)
         .post("/posts")
         .send({ content: "hello again world" });
 
@@ -256,8 +257,8 @@ describe('GET /posts/feed/:userId, when a token is present', () => {
     if (!mainUser) throw new Error("Main user not found");
 
     // 2. Create friend users
-    const friend1 = await User.create({email: 'f1@test.com', password: 'test123'});
-    const friend2 = await User.create({email: 'f2@test.com', password: 'test1234'});
+    const friend1 = await User.create({name: "someone", email: 'f1@test.com', password: 'test123'});
+    const friend2 = await User.create({name: "someone", email: 'f2@test.com', password: 'test1234'});
 
     // 3. Update friends list and save
     mainUser.friends = [friend1._id, friend2._id];
