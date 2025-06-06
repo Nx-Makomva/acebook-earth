@@ -17,6 +17,10 @@ function create(req, res) {
     });
 }
 
+async function getFriends(req, res) {
+  
+}
+
 const UsersController = {
   create: create,
 };

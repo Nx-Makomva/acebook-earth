@@ -1,0 +1,25 @@
+
+.feed-title {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 2rem;
+    color: #e4e37f;
+}
+
+.feed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.post-card {
+    background-color: white;
+    border: 1px solid #ff5da9;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
