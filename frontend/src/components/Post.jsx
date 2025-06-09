@@ -1,3 +1,4 @@
+
 function Post(props) {
   const { _id, content, image } = props.post;
 
