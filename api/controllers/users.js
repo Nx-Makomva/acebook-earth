@@ -81,8 +81,8 @@ async function updateUser(req, res) {
 
 async function addFriend(req, res) {
   try {
-    const userId = req.user_id; // From JWT
-    const { myId, friendId } = req.params; // From routes
+    const userId = req.user_id; 
+    const { myId, friendId } = req.params; 
 
     if (userId !== myId) {
       return res.status(403).json({ message: "Stop! You may only add friends to your own account!" });
@@ -95,7 +95,7 @@ async function addFriend(req, res) {
     
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { $addToSet: { friends: friendId } }, // $addToSet prevents duplicates
+      { $addToSet: { friends: friendId } }, 
       { new: true, runValidators: true }
     );
     
