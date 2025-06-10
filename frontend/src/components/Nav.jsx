@@ -109,7 +109,7 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
 
         <div className="home">
           <a
-            href="/posts"
+            href="/posts/feed/:userId"
             className="nav-home-link flex items-center justify-center"
           >
             <HomeIcon className="home-icon w-6 h-6" />

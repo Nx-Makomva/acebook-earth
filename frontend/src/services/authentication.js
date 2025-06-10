@@ -13,7 +13,7 @@ export async function login(email, password) {
     },
     body: JSON.stringify(payload),
   };
-
+  console.log("We hit login function")
   const response = await fetch(`${BACKEND_URL}/tokens`, requestOptions);
 
   if (response.status === 201) {

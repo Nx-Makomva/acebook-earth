@@ -18,6 +18,7 @@ export function LoginPage() {
       const response = await login(email, password);
       localStorage.setItem("token", response.token);
       localStorage.setItem("userId", response.userId);
+      console.log("LOOK AT ME!", response.token)
       window.dispatchEvent(new Event("authChange"));
       navigate(`/posts/feed/${response.userId}`);
 

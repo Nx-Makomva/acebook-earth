@@ -9,6 +9,7 @@ function CommentSection({ postId }) {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log("COMMENT SECTION TOKEN", token)
     if (!token) return;
 
     getComments(postId, token)
