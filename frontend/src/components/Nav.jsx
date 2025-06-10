@@ -45,6 +45,7 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
 
   const HandleAddfriend = (friendId) => {
     addFriend(friendId);
+    // This functionality should be moved out of search functionality
   };
 
   return (
