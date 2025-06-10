@@ -1,0 +1,73 @@
+.userFormContainer {
+    min-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #4ac4dcb4;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: sans-serif;
+}
+
+.userFormContainer h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.userFormContainer label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.userFormContainer input[type="text"],
+.userFormContainer input[type="password"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.userFormContainer input[type="submit"] {
+    width: 100%;
+    background-color: #ff00d4;
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.userFormContainer input[type="submit"]:hover {
+    background-color: #b20094;
+}
+
+.userFormContainer p {
+    font-size: 0.85rem;
+    color: #777;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.userFormContainer textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: sans-serif;
+}
+
+.userFormContainer input[type=date] {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: sans-serif
+}

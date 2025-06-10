@@ -1,0 +1,26 @@
+.profile-card {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+
+    transform: translate(-50%);
+    background-color: aqua;
+    border: 1px solid black;
+    border-radius: 4px;
+    height: 0;
+    width: 20%;
+    padding-bottom: 20%;
+}
+
+.bio-card {
+    height: 100%;
+    max-width: 200px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background-color: aqua;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 1rem;
+    text-align: left;
+}

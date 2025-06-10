@@ -1,11 +1,8 @@
-import { useNavigate } from "react-router-dom";
-
 function LogoutButton() {
-  const navigate = useNavigate();
-
   function logOut() {
     localStorage.removeItem("token");
-    navigate("/");
+    window.dispatchEvent(new Event('authChange'))
+    window.location.href = "/"
   }
 
   return <button onClick={logOut}>Log out</button>;
