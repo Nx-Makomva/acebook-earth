@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import UsersForm from "../../components/UsersForm"
+
 import { signup } from "../../services/authentication";
 
 export function SignupPage() {
@@ -13,10 +15,12 @@ export function SignupPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
+
       const token = await signup(name, email, password);
       localStorage.setItem("token", token)
       window.dispatchEvent(new Event("authChange"));
       navigate("/posts"); // This now navigates to the feedpage instead of 'login'
+
     } catch (err) {
       console.error(err);
       navigate("/signup");
@@ -38,33 +42,26 @@ export function SignupPage() {
   return (
     <>
       <h2>Signup</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name">Name:</label>
-        <input
-          placeholder="Name"
-          id="name"
-          type="text"
-          value={name}
-          onChange={handleNameChange}
-        />
-        <label htmlFor="email">Email:</label>
-        <input
-          placeholder="Email"
-          id="email"
-          type="text"
-          value={email}
-          onChange={handleEmailChange}
-        />
-        <label htmlFor="password">Password:</label>
-        <input
-          placeholder="Password"
-          id="password"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        <input role="submit-button" id="submit" type="submit" value="Submit" />
-      </form>
+
+      <UsersForm
+        name={name}
+        onNameChange={handleNameChange}
+        showName={true}
+
+        email={email}
+        onEmailChange={handleEmailChange}
+        showEmail={true}
+
+        password={password}
+        onPasswordChange={handlePasswordChange} 
+        showPassword={true}
+
+        onSubmit={handleSubmit}
+        // showLocation={true}
+        // showBio={true}
+        // showDOB={true}
+        // showStatus={true}
+      />
     </>
   );
 }

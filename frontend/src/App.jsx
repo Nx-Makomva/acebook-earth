@@ -5,6 +5,7 @@ import { HomePage } from "./pages/Home/HomePage";
 import { LoginPage } from "./pages/Login/LoginPage";
 import { SignupPage } from "./pages/Signup/SignupPage";
 import { FeedPage } from "./pages/Feed/FeedPage";
+import { ProfilePage } from "./pages/Profile/ProfilePage";
 
 import { searchUsers } from "./services/users";
 import { addFriend } from "./services/friends";
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
     path: "/posts",
     element: <FeedPage />,
   },
+  {
+    path: "/profile/:id",
+    element: <ProfilePage />
+  }
 ]);
 
 function App() {
