@@ -1,6 +1,6 @@
 
 import './FeedPage.css';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getFeed } from "../../services/posts";
@@ -11,36 +11,52 @@ import LogoutButton from "../../components/LogoutButton";
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchFeed = useCallback(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       navigate("/login");
       return;
-    }
-
-    getFeed(token)
-      .then((data) => {
-        setPosts(data.posts);
-        localStorage.setItem('token', data.token);
-      })
-      .catch((err) => {
-        console.error(err);
-        navigate('/login');
-      });
+  }
+  setLoading(true);
+  getFeed(token)
+    .then((data) => {
+      setPosts(data.posts);
+      localStorage.setItem('token', data.token);
+    })
+    .catch((err) => {
+      console.error(err);
+      navigate('/login');
+    })
+    .finally(() => setLoading(false));
   }, [navigate]);
+
+  useEffect(() => {
+    fetchFeed();
+  }, [fetchFeed]);
 
 
 return (
   <>
     <h2 className="feed-title">My Feed</h2>
     <div className="feed" role="feed">
-      {posts.length === 0 ? (
-        <div className="empty-feed">You could use some friends!Your feed is empty.</div>
+      {loading ? (
+        <p className='loading-feed'>Loading feed...</p>
+      ) : posts.length === 0 ? (
+        <div className='empty-feed'>
+          Youcould use some friends! Your feed is empty.
+          </div>
       ) : (
-        posts.map((post) => <Post post={post} key={post._id} />)
-      )}
+        posts.map((post) => (
+          <Post
+          post={post}
+          key={post._id}
+          onPostUpdate={fetchFeed}
+          />
+        ))
+        )}
     </div>
     <LogoutButton />
   </>
