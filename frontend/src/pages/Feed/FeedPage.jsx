@@ -18,8 +18,9 @@ export function FeedPage() {
       return;
   }
   setLoading(true);
-  getFeed(token)
+  getFeed(userId, token)
     .then((data) => {
+    // check if data.posts references correct data
       const sortedPosts = [...data.posts].sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );

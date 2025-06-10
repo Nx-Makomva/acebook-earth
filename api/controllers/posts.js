@@ -24,15 +24,27 @@ try
   res.status(200).json({ post: post, token: token });}
   catch (error){
   res.status(500).json({message: "It's not you, it's me", error})
-}
+}};
 
-}
 async function getPostsByFriend(friendId) {
-  const posts = await Post.find({userId: friendId});
-  return posts;
+  const posts = await Post.find({ userId: friendId });
+  
+  // Get user data for each post's userId
+  const postsWithUsernames = await Promise.all(
+    posts.map(async (post) => {
+      const user = await User.findById(post.userId);
+      return {
+        ...post.toObject(),
+        username: user.name 
+      };
+    })
+  );
+  
+  return postsWithUsernames;
 }
 
 async function getFeed(req, res) {
+  console.log("I HIT THE FUNCTION! YAY!")
   try {
     const userId = req.params.userId; 
     const user = await User.findById(userId);
@@ -40,11 +52,13 @@ async function getFeed(req, res) {
       return res.status(404).json({message: 'User not found.'});
     }
     const friends = user.friends;
+    console.log("I AM YOUR FRIEND:", friends)
 
     // Get posts from all friends in parallel
     const postsArrays = await Promise.all(
       friends.map(friendId => getPostsByFriend(friendId))
     );
+    console.log("HERE ARE SOME POSTS:", postsArrays)
 
     // Flatten array of arrays into a single array of posts
     const allPosts = postsArrays.flat();
@@ -117,6 +131,91 @@ async function deletePost(req, res) {
 }
 }
 
+async function addComment(req, res) {
+  console.log("ADD COMMENT has been triggered")
+  try {
+    const postId = req.params.postId;
+    const { userId, comment } = req.body;
+    console.log("LET'S CHECK THESE PARAMS:", postId, userId, comment);
+    if (!comment) {
+      return res.status(400).json({ message: "Comment text is required" });
+    }
+
+    const user = await User.findById(userId);
+    console.log("USER:", user);
+    const userName = user.name;
+    console.log("USERNAME:", userName)
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      { $push: { comments: { userName, comment } } },
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const token = generateToken(req.body.userId);
+    res.status(201).json({ 
+      message: "Comment added", 
+      comments: updatedPost.comments,
+      token 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to add comment", error });
+  }
+}
+
+async function getComments(req, res) {
+  try {
+    console.log("get comments");
+    const postId = req.params.postId;
+    const post = await Post.findById(postId).select('comments');
+    console.log(JSON.stringify(post));
+    const comms = await Post.findById(postId);
+    console.log(JSON.stringify(comms));
+    
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const token = generateToken(req.user_id);
+    res.status(200).json({ 
+      comments: post.comments,
+      token 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to get comments", error });
+  }
+}
+
+async function deleteComment(req, res) {
+  try {
+    const { postId, commentId } = req.params;
+    
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      { $pull: { comments: { _id: commentId } }},
+      { new: true }
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const token = generateToken(req.user_id);
+    res.status(200).json({ 
+      message: "Comment deleted",
+      comments: updatedPost.comments,
+      token 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to delete comment", error });
+  }
+}
 
 
 const PostsController = {
@@ -126,6 +225,9 @@ const PostsController = {
   getFeed: getFeed,
   editPost: editPost,
   deletePost: deletePost,
+  addComment: addComment,
+  getComments: getComments,
+  deleteComment: deleteComment,
 };
 
 module.exports = PostsController;
