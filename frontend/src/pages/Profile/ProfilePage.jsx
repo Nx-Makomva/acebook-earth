@@ -5,16 +5,20 @@ import { getById } from "../../services/users";
 import UsersForm from "../../components/UsersForm";
 import "./ProfilePage.css"
 
-const token = localStorage.getItem("token");
-
 function decodeToken(token) {
-    const payloadBase64 = token.split('.')[1];
-    const decodedPayload = atob(payloadBase64);
-    return JSON.parse(decodedPayload);
-}
+    if (!token) return null;
 
-const decoded = decodeToken(token)
-const user_id = decoded.sub;
+    try {
+        const payloadBase64 = token.split('.')[1];
+        if (!payloadBase64) return null;
+
+        const decodedPayload = atob(payloadBase64);
+        return JSON.parse(decodedPayload);
+    } catch (error) {
+        console.error("Failed to decode token:", error);
+        return null;
+    }
+}
 
 export function ProfilePage() {
     const { id } = useParams();
@@ -22,8 +26,12 @@ export function ProfilePage() {
     const [user, setUser] = useState();
     const[notFound, setNotFound] = useState(false);
 
+    const token = localStorage.getItem("token");
+    const decoded = decodeToken(token);
+    const user_id = decoded?.sub;
+
     useEffect(() => {
-    if (!token) {
+    if (!token || !user_id) {
         navigate("/login");
         return;
     }
@@ -36,7 +44,7 @@ export function ProfilePage() {
             console.error(err)
             setNotFound(true)
         })
-    }, [id, navigate])
+    }, [id, navigate, token, user_id])
 
     if (notFound) {
         return <div>404 error: Profile not found</div>

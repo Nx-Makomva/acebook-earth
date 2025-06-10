@@ -57,17 +57,34 @@ async function getFeed(req, res) {
   }
 }
 
-async function createPost(req, res) {
-  //we need an error handling
-  try
-{  const post = new Post(req.body);
-  post.save();
+// async function createPost(req, res) {
+//   //we need an error handling
+//   try
+// {  const post = new Post(req.body);
+//   post.save();
 
-  const newToken = generateToken(req.user_id);
-  res.status(201).json({ message: "Post created", token: newToken });}
-  catch (error){
-  res.status(500).json({message: "It's not you, it's me", error})
-}
+//   const newToken = generateToken(req.user_id);
+//   res.status(201).json({ message: "Post created", token: newToken });}
+//   catch (error){
+//   res.status(500).json({message: "It's not you, it's me", error})
+// }
+// }
+
+async function createPost(req, res) {
+  try {
+    // Validate required fields
+    if (req.body.content.trim().length === 0 && !req.body.image) {
+      return res.status(400).json({ message: "Content or image required" });
+    }
+    
+    const post = new Post(req.body);
+    await post.save(); // Add await here
+    
+    const newToken = generateToken(req.user_id);
+    res.status(201).json({ message: "Post created", token: newToken });
+  } catch (error) {
+    res.status(500).json({ message: "It's not you, it's me", error });
+  }
 }
 
 async function editPost(req, res) {

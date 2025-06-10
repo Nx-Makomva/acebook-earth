@@ -1,5 +1,6 @@
 function Post({post}) {
   const { _id, content, image } = post;
+  if (!content?.trim() && (!image || image.length === 0)) return null;
 
   return (
     <article key={_id} className="post-card">
@@ -7,8 +8,7 @@ function Post({post}) {
       {Array.isArray(image) && image.map((img, i) => {
         //convert buffer to base64 and render as <img />
         //and allows for multiple image storage.
-        if (!img.image?.data || !img.image?.contentType) return null;
-
+        
         const base64String = btoa(
           new Uint8Array(img.image.data.data).reduce(
             (data, byte) => data + String.fromCharCode(byte),
