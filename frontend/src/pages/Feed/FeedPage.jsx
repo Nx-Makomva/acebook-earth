@@ -23,9 +23,13 @@ export function FeedPage() {
   setLoading(true);
   getFeed(token)
     .then((data) => {
-      setPosts(data.posts);
-      localStorage.setItem('token', data.token);
-    })
+      const sortedPosts = [...data.posts].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+    setPosts(sortedPosts);
+    localStorage.setItem('token', data.token);
+  })
+
     .catch((err) => {
       console.error(err);
       navigate('/login');
@@ -36,7 +40,6 @@ export function FeedPage() {
   useEffect(() => {
     fetchFeed();
   }, [fetchFeed]);
-
 
 return (
   <>
