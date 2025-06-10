@@ -6,6 +6,7 @@ import UsersForm from "../../components/UsersForm"
 import { signup } from "../../services/authentication";
 
 export function SignupPage() {
+  localStorage.removeItem("token");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -14,8 +15,12 @@ export function SignupPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      await signup(name, email, password);
-      navigate("/login");
+
+      const token = await signup(name, email, password);
+      localStorage.setItem("token", token)
+      window.dispatchEvent(new Event("authChange"));
+      navigate("/posts"); // This now navigates to the feedpage instead of 'login'
+
     } catch (err) {
       console.error(err);
       navigate("/signup");
@@ -37,6 +42,7 @@ export function SignupPage() {
   return (
     <>
       <h2>Signup</h2>
+
       <UsersForm
         name={name}
         onNameChange={handleNameChange}

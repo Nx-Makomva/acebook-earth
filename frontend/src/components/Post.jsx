@@ -1,5 +1,5 @@
-function Post(props) {
-  const { _id, content, image } = props.post;
+function Post({post}) {
+  const { _id, content, image } = post;
 
   return (
     <article key={_id}>
