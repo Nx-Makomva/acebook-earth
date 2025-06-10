@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import UsersForm from "../../components/UsersForm"
+
 import { login } from "../../services/authentication";
 
 export function LoginPage() {
+  localStorage.removeItem("token");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -13,6 +16,7 @@ export function LoginPage() {
     try {
       const token = await login(email, password);
       localStorage.setItem("token", token);
+      window.dispatchEvent(new Event("authChange"));
       navigate("/posts");
     } catch (err) {
       console.error(err);
@@ -31,23 +35,17 @@ export function LoginPage() {
   return (
     <>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input
-          id="email"
-          type="text"
-          value={email}
-          onChange={handleEmailChange}
+      <UsersForm
+        email={email}
+        onEmailChange={handleEmailChange}
+        showEmail={true}
+
+        password={password}
+        onPasswordChange={handlePasswordChange} 
+        showPassword={true}
+
+        onSubmit={handleSubmit}
         />
-        <label htmlFor="password">Password:</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        <input role="submit-button" id="submit" type="submit" value="Submit" />
-      </form>
     </>
   );
 }

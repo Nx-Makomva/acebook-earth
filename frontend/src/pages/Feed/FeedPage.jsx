@@ -5,9 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 import { getFeed } from "../../services/posts";
 import Post from "../../components/Post";
-import LogoutButton from "../../components/LogoutButton";
-// import { post } from '../../../../api/models/imageSchema';
-
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
@@ -41,6 +38,7 @@ export function FeedPage() {
     fetchFeed();
   }, [fetchFeed]);
 
+
 return (
   <>
     <h2 className="feed-title">My Feed</h2>
@@ -61,7 +59,7 @@ return (
         ))
         )}
     </div>
-    <LogoutButton />
   </>
 );
+
 }
