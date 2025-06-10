@@ -2,7 +2,7 @@ function Post({post}) {
   const { _id, content, image } = post;
 
   return (
-    <article key={_id}>
+    <article key={_id} className="post-card">
       <p>{content}</p>
       {Array.isArray(image) && image.map((img, i) => {
         //convert buffer to base64 and render as <img />
