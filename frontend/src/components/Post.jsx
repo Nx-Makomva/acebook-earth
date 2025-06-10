@@ -1,28 +1,15 @@
-import { useState } from "react";
+import LikeButton from './LikeButton';
+import CommentSection from './CommentSection';
 
 function Post(props) {
-  const { _id, content, image, comments = [], likes = 0 } = props.post;
-  const [ newComment, setNewComment ] = useState("");
-  const[showComment, setShowComment] = useState(false);
-  const [currentLikes, setCurrentLikes] = useState(Array.isArray(likes) ? likes.length : 0);
-  const [isLiked, setIsLiked] = useState(false);
-
-  const handleLike = () => {
-    const newLikeStatus = !isLiked;
-    setIsLiked(newLikeStatus);
-    setCurrentLikes(newLikeStatus ? currentLikes + 1: currentLikes - 1)
-  
-    console.log(`${newLikeStatus ? "Liking": "Unliking"} Post ${_id}`)
-
-  }
-
+  const { _id, content, image, comments = [], likes = 0, username} = props.post;
 
   return (
-    <article key={_id}>
+    <article key={_id} style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd' }}>
+      <p>{username}</p>
       <p>{content}</p>
+      
       {Array.isArray(image) && image.map((img, i) => {
-        //convert buffer to base64 and render as <img />
-        //and allows for multiple image storage.
         if (!img.image?.data || !img.image?.contentType) return null;
 
         const base64String = btoa(
@@ -35,28 +22,17 @@ function Post(props) {
         return (
           <img
             key={i}
-            //also edited the use of template literals (backticks) to dynamically build the src string
             src={`data:${img.image.contentType};base64,${base64String}`}
             alt={img.name || "Post image"}
             style={{ maxWidth: "300px", marginTop: "10px" }}
           />
         );
       })}
-    <div style={{ marginTop: '10px' }}>
-        <button 
-          onClick={handleLike}
-          style={{ 
-            background: isLiked ? '#ff6b6b' : '#f0f0f0',
-            border: 'none',
-            padding: '5px 10px',
-            borderRadius: '5px',
-            cursor: 'pointer'
-          }}
-        >
-          {isLiked ? '❤️ Liked' : '🤍 Like'}
-        </button>
-        <span style={{ marginLeft: '5px' }}>{currentLikes} likes</span>
-      </div>
+      
+
+      <LikeButton initialLikes={likes} postId={_id} />
+      
+      <CommentSection comments={comments} postId={_id} />
     </article>
   );
 }

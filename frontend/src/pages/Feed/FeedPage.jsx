@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getPosts } from "../../services/posts";
+import { getFeed } from "../../services/posts";
 import Post from "../../components/Post";
 import LogoutButton from "../../components/LogoutButton";
 
@@ -11,12 +11,14 @@ export function FeedPage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
     const loggedIn = token !== null;
     if (loggedIn) {
-      getPosts(token)
+      // change to getFeed method
+      getFeed(userId, token)
         .then((data) => {
-          setPosts(data.posts);
-          localStorage.setItem("token", data.token);
+          setPosts(data);
+          console.log("DATA FROM GETFEED:", data)
         })
         .catch((err) => {
           console.error(err);
