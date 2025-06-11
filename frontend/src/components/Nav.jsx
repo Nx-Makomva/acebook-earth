@@ -18,29 +18,35 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
   const [showDropdownMenu, setShowDropdownMenu] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
-  const userId = localStorage.getItem('userId')
+  const userId = localStorage.getItem("userId");
 
   // Creating references for search field and menu so they close
   // when user clicks away from them
-  const searchContainerRef = useRef(null)
-  const menuContainerRef = useRef(null)
+  const searchContainerRef = useRef(null);
+  const menuContainerRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
-        setShowSearchResults(false)
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target)
+      ) {
+        setShowSearchResults(false);
       }
 
-      if (menuContainerRef.current && !menuContainerRef.current.contains(event.target)) {
-        setShowDropdownMenu(false)
+      if (
+        menuContainerRef.current &&
+        !menuContainerRef.current.contains(event.target)
+      ) {
+        setShowDropdownMenu(false);
       }
     };
 
-      document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside)
-      }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   useEffect(() => {
@@ -73,18 +79,20 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
     try {
       await addFriend(friendId);
       // This functionality should be moved out of search functionality
-      setShowSearchResults(false)
+      setShowSearchResults(false);
     } catch (error) {
-      console.error("Could not add friend")
+      console.error("Could not add friend");
     }
-    
   };
 
   return (
     <nav className="nav">
       <div className="nav-inner flex items-center justify-between p-6">
         <div className="nav-logo">
-          <a href={`/posts/feed/${userId}`} className="nav-home-link flex items-center justify-center">
+          <a
+            href={`/posts/feed/${userId}`}
+            className="nav-home-link flex items-center justify-center"
+          >
             <img src={logo} alt="Logo" className="h-10" />
           </a>
         </div>
@@ -108,24 +116,30 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
                 users.map((user) => (
                   <div
                     key={user._id}
-                    className="search-result-item p-3 hover:bg-gray-50 cursor-pointer flex items-center border-b last:border-b-0"
+                    className="search-result-item p-3 hover:bg-gray-50 cursor-pointer flex items-center justify-between border-b last:border-b-0"
                   >
-                    <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mr-3">
-                      <User2Icon className="w-4 h-4 text-gray-600" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {user.name.charAt(0).toUpperCase() + user.name.slice(1)}
-                      </p>
-                      <button onClick={() => HandleAddfriend(user._id)}>
-                        Add Friend
-                      </button>
-                    </div>
+                      <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mr-3">
+                        <User2Icon className="w-4 h-4 text-gray-600" />
+                      </div>
+                      <a href={`/profile/${user._id}`}>
+                        <div>
+                          <p className="font-medium text-gray-900">
+                            {user.name.charAt(0).toUpperCase() +
+                              user.name.slice(1)}
+                          </p>
+                        </div>
+                      </a>
+                    {/* <button
+                      onClick={() => HandleAddfriend(user._id)}
+                      className="ml-3 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                    >
+                      Add Friend
+                    </button> */}
                   </div>
                 ))
               ) : (
-                <div className="p-4 text-center text-gray-500">
-                  No users found for: {searchTerm}
+                <div className="p-3 text-gray-500 text-center">
+                  No users found
                 </div>
               )}
             </div>
@@ -133,7 +147,10 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
         </div>
 
         <div className="home">
-          <a href={`/posts/feed/${userId}`} className="nav-home-link flex items-center justify-center">
+          <a
+            href={`/posts/feed/${userId}`}
+            className="nav-home-link flex items-center justify-center"
+          >
             <HomeIcon className="home-icon w-6 h-6" />
           </a>
         </div>

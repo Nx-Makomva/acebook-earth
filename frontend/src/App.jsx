@@ -86,7 +86,7 @@ function App() {
   },
   {
     path: "/profile/:id",
-    element: <ProfilePage />
+    element: <ProfilePage addFriend={HandleAddfriend}/>
   }
 ]);
 
