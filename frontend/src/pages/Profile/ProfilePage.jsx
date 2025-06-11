@@ -242,8 +242,8 @@ export function ProfilePage() {
             </div>
             <div className="bio-card">
                 <p id="status"><strong>Status: <br /></strong>{user.status}</p>
-                <p id="location"><strong>Status: <br /></strong>{user.location}</p>
-                <p id="bio"><strong>Status: <br /></strong>{user.bio}</p>
+                <p id="location"><strong>Location: <br /></strong>{user.location}</p>
+                <p id="bio"><strong>Bio: <br /></strong>{user.bio}</p>
             </div>
         </>
         )
