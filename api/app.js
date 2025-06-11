@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+
+
 const usersUnprotectedRouter = require("./routes/usersUnprotected");
 const usersProtectedRouter = require("./routes/usersProtected");
 const postsRouter = require("./routes/posts");
