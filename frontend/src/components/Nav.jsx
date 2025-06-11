@@ -18,9 +18,10 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
   const [showDropdownMenu, setShowDropdownMenu] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
 
+  const userId = localStorage.getItem('userId')
+
   // Creating references for search field and menu so they close
   // when user clicks away from them
-
   const searchContainerRef = useRef(null)
   const menuContainerRef = useRef(null)
 
@@ -83,7 +84,7 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
     <nav className="nav">
       <div className="nav-inner flex items-center justify-between p-6">
         <div className="nav-logo">
-          <a href="/posts/feed/:userId" className="nav-home-link flex items-center justify-center">
+          <a href={`/posts/feed/${userId}`} className="nav-home-link flex items-center justify-center">
             <img src={logo} alt="Logo" className="h-10" />
           </a>
         </div>
@@ -132,7 +133,7 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
         </div>
 
         <div className="home">
-          <a href="/posts/feed/:userId" className="nav-home-link flex items-center justify-center">
+          <a href={`/posts/feed/${userId}`} className="nav-home-link flex items-center justify-center">
             <HomeIcon className="home-icon w-6 h-6" />
           </a>
         </div>
@@ -148,7 +149,7 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
 
           {showDropdownMenu && (
             <div className="dropdown-menu">
-              <a href="/profile" className="dropdown-item">
+              <a href={`/profile/${userId}`} className="dropdown-item">
                 <User2Icon className="dropdown-icon w-5 h-5" />
                 Profile
               </a>
