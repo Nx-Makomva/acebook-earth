@@ -1,16 +1,16 @@
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Button from "./Button";
 
-// function LogoutButton() {
-//   const navigate = useNavigate();
 
-//   function logOut() {
-//     localStorage.removeItem("token");
-//     navigate("/");
-//   }
+const LogoutButton = () => {
+    const navigate = useNavigate();
 
-//   return <button onClick={logOut}>Log out</button>;
-// }
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate("/");
+    };
 
-// export default LogoutButton;
+    return <Button onClick={handleLogout}>Logout</Button>;
+};
 
-//we're using the Button file instead.
+export default LogoutButton;

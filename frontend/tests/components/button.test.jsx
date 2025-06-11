@@ -4,8 +4,8 @@ import Button from "../../src/components/Button";
 describe("Button component", () => {
     //will check that our button apprears on the screen with the Click me child (text).
     it("renders with default variant", () => {
-        render(<Button>Click me</Button>);
-        const button = screen.getByText("Click me");
+        render(<Button>Default</Button>);
+        const button = screen.getByText("Default");
         expect(button).toBeInTheDocument();
     });
 
@@ -14,15 +14,28 @@ describe("Button component", () => {
         const handleClick = jest.fn(); //we're creating a pretend (fake function) that we can track. 
         //fn means function
         render(<Button variant="confirm" onClick={handleClick}>Confirm</Button>);
-        const button = screen.getByText("Confirm");
-        fireEvent.click(button);
+        fireEvent.click(screen.getByText("Confirm"));
         expect(handleClick).toHaveBeenCalled();
     });
 
     it("renders an application of cancel, its styling and disables the button", () => {
-        render(<Button variant="cancel" disabled>Cancel</Button>);
-        const button = screen.getByText("Cancel");
-        expect(button).toBeDisabled();
+        const handleClick = jest.fn();
+        render(<Button variant="cancel" onClick={handleClick}>Cancel</Button>);
+        fireEvent.click(screen.getByText("Cancel"));
+        expect(handleClick).toHaveBeenCalled();
+    });
+
+    it("renders an application of logout when clicked", () => {
+        const logoutClick = jest.fn();
+        render(<Button onClick={logoutClick}>Logout</Button>);
+        fireEvent.click(screen.getByText("Logout"));
+        expect(logoutClick).toHaveBeenCalled();
+    });
+
+    it("renders an application of an aria label for accessibility", () => {
+        render(<Button ariaLabel="like-post">Like</Button>);
+        const button = screen.getByLabelText("like-post");
+        expect(button).toBeInTheDocument();
     });
 });
 

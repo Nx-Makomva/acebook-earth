@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { getPosts } from "../../services/posts";
 import Post from "../../components/Post";
-// import LogoutButton from "../../components/LogoutButton"; - not needed
+// import LogoutButton from "../../components/LogoutButton"; // sure whether this is needed.
 import Button from "../../components/Button"; // added
 
 export function FeedPage() {
@@ -13,25 +13,39 @@ export function FeedPage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const loggedIn = token !== null;
-    if (loggedIn) {
-      getPosts(token)
-        .then((data) => {
-          setPosts(data.posts);
-          localStorage.setItem("token", data.token);
-        })
-        .catch((err) => {
-          console.error(err);
-          navigate("/login");
-        });
+    if (!token) {
+      navigate("/login");
+      return;
     }
+//new code added a little similar to the original one
+    getPosts(token)
+      .then((data) => {
+        setPosts(data.posts);
+        localStorage.setItem("token", data.token);
+      })
+      .catch((e) => {
+        console.error(e);
+        navigate("/login");
+      });
+    // const loggedIn = token !== null;
+    // if (loggedIn) {
+    //   getPosts(token)
+    //     .then((data) => {
+    //       setPosts(data.posts);
+    //       localStorage.setItem("token", data.token);
+    //     })
+    //     .catch((err) => {
+    //       console.error(err);
+    //       navigate("/login");
+    //     });
+    // }
   }, [navigate]);
 
-  const token = localStorage.getItem("token");
-  if (!token) {
-    navigate("/login");
-    return;
-  }
+  // const token = localStorage.getItem("token");
+  // if (!token) {
+  //   navigate("/login");
+  //   return;
+  // }
 
   //added code below from lines 37 to 44 - handleButtonClick
   const handleButtonClick = () => {
@@ -41,6 +55,11 @@ export function FeedPage() {
       alert("Post confirmed!");
     }
     setConfirmed(!confirmed);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
   };
 
   return (
@@ -57,11 +76,16 @@ export function FeedPage() {
       </div>
       {/* added this code below and commented out the original logout button */}
       <div className="my-4">
-        <Button variant="cancel" onClick={() => {
+        {/* <Button variant="cancel" onClick={() => {
           localStorage.removeItem("token");
           navigate("/login")
           }}
         >
+          Log out
+        </Button> */}
+        {/* changed the above button to the below code */}
+
+        <Button variant="cancel" onClick={handleLogout}>
           Log out
         </Button>
       </div>

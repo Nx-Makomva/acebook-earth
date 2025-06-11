@@ -38,8 +38,8 @@ function Post(props) {
         );
       })}
 
-      <div style={{ marginTop: "10p" }}>
-        <Button onClick={handleLike} variant="default">
+      <div style={{ marginTop: "10px" }}>
+        <Button onClick={handleLike} variant="default" ariaLabel="like-button">
           {liked ? "❤️" : "🤍"} {likes}
         </Button>
       </div>
