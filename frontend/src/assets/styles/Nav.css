@@ -314,6 +314,23 @@
   color: #6366f1;
 }
 
+.logout-item {
+  color: #dc2626 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.logout-item:hover {
+  background-color: rgba(220, 38, 38, 0.08) !important;
+  color: #b91c1c !important;
+}
+
 /* Responsive Design Edits so it's smooth at diff screens sizes */
 @media (max-width: 768px) {
   .nav-logo {

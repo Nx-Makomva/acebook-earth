@@ -83,7 +83,7 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
     <nav className="nav">
       <div className="nav-inner flex items-center justify-between p-6">
         <div className="nav-logo">
-          <a href="/posts" className="nav-home-link flex items-center justify-center">
+          <a href="/posts/feed/:userId" className="nav-home-link flex items-center justify-center">
             <img src={logo} alt="Logo" className="h-10" />
           </a>
         </div>
