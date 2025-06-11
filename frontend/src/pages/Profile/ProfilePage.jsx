@@ -59,6 +59,7 @@ export function ProfilePage({ addFriend }) {
         setUserProfile(user);
         const userName = user.name.charAt(0).toUpperCase() + user.name.slice(1);
         setProfileName(userName);
+				setFriendCount(user.friends.length)
 				// console.log("The user profiles matessssss", userProfile.friends)
       })
       .catch((err) => {
@@ -75,8 +76,6 @@ export function ProfilePage({ addFriend }) {
       const userViewingProfile = data.user;
       const friendsList = userViewingProfile.friends;
 			console.log("this is friends list broooo", friendsList)
-			const numOfFriends = friendsList.length;
-			setFriendCount(numOfFriends);
 
       if (friendsList.includes(id)) {
         setIsFriend(true);

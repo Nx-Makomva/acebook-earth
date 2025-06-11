@@ -181,7 +181,7 @@ async function getAllFriends(req, res) {
   try {
     const { id } = req.params;
 
-    const user = await User.findById(id).populate('friends', ' name status ');
+    const user = await User.findById(id).populate('friends', 'name status');
     if (!user) {
       return res.status(404).json({ message: 'User not found'});
     }
