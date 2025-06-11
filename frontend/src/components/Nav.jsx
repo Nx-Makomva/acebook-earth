@@ -32,7 +32,7 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
     } else {
       setShowSearchResults(false);
     }
-  }, [debouncedSearchTerm, onSearch]);
+  }, [debouncedSearchTerm]); // ignore this warning. onSearch should NOT be a dependency
 
   const handleSearch = (event) => {
     event.preventDefault();
@@ -43,9 +43,14 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
     }
   };
 
-  const HandleAddfriend = (friendId) => {
-    addFriend(friendId);
+  const HandleAddfriend = async (friendId) => {
+    try {
+      await addFriend(friendId);
     // This functionality should be moved out of search functionality
+    } catch (error) {
+      console.error("Could not add friend")
+    }
+    
   };
 
   return (

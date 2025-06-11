@@ -76,6 +76,9 @@ export function SignupPage() {
         // showDOB={true}
         // showStatus={true}
       />
+      <a href="/login">
+        <button>Login</button>
+        </a>
     </>
   );
 }

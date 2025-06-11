@@ -50,6 +50,9 @@ export function LoginPage() {
 
         onSubmit={handleSubmit}
         />
+        <a href="/signup">
+        <button>Sign Up</button>
+        </a>
     </>
   );
 }
