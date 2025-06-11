@@ -1,9 +1,8 @@
+import "../../assets/styles/ProfilePage.css"
+
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getById } from "../../services/users";
-
-import UsersForm from "../../components/UsersForm";
-import "./ProfilePage.css"
 
 function decodeToken(token) {
     if (!token) return null;

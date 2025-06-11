@@ -25,15 +25,15 @@ const Post = mongoose.model("Post", PostSchema);
 // These lines will create a test post every time the server starts.
 // You can delete this once you are creating your own posts.
 const dateTimeString = new Date().toLocaleString("en-GB");
-new Post({ content: `Test message, created at ${dateTimeString}`, 
-  //issue how we're calling the below to generate the image
-  image: [{ 
-    name: "puppies.jpeg",
-    image: {
-      data: imageData, 
-      contentType: "image/jpeg"
-    }
-  }]
-}).save();
+// new Post({ content: `Test message, created at ${dateTimeString}`, 
+//   //issue how we're calling the below to generate the image
+//   image: [{ 
+//     name: "puppies.jpeg",
+//     image: {
+//       data: imageData, 
+//       contentType: "image/jpeg"
+//     }
+//   }]
+// }).save();
 
 module.exports = Post;
