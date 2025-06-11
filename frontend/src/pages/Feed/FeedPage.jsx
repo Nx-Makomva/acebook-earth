@@ -9,7 +9,7 @@ import Post from "../../components/Post";
 import Button from "../../components/Button"; // added
 
 
-export function FeedPage() {
+export function FeedPage({ refreshTrigger }) {
   const [posts, setPosts] = useState([]);
   const [confirmed, setConfirmed] = useState(false); // added
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ export function FeedPage() {
     //       navigate("/login");
     //     });
     // }
-  }, [navigate]);
+  }, [navigate, refreshTrigger]);
 
   // const token = localStorage.getItem("token");
   // if (!token) {

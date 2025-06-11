@@ -19,7 +19,7 @@ function decodeToken(token) {
     }
 }
 
-export function ProfilePage() {
+export function ProfilePage({ addFriend }) {
     const { id } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState();
@@ -52,54 +52,68 @@ export function ProfilePage() {
         return <div>...Loading, go and do something useful while you wait.</div>
     }
 
+    const HandleAddfriend = async (id) => {
+    try {
+      await addFriend(id);
+      // setShowSearchResults(false);
+    } catch (error) {
+      console.error("Could not add friend");
+    }
+  };
+
     if (id === user_id) {
         return (
-        <>
-            <h1>My Profile</h1>
-            <div className="profile-card">
-                <p>
-                <img
-                src="https://i0.wp.com/eos.org/wp-content/uploads/2025/02/everest-peak.jpg?fit=1200%2C675&ssl=1"
-                alt="profile picture"
-                width="200"
-                height="200"
-                /></p>
-                <p id="name">Name: {user.name}</p>
-                <p id="age">Age: {Math.floor(
-                    (new Date(Date.now() - new Date(user.dob).getTime())).getUTCFullYear() - 1970
-                    )
-                }</p>
+            <div className="profile-page-container">
+                <div className="profile-content">
+                    <h1>My Profile</h1>
+                    <div className="profile-card">
+                        <p>
+                            <img
+                                src="https://i0.wp.com/eos.org/wp-content/uploads/2025/02/everest-peak.jpg?fit=1200%2C675&ssl=1"
+                                alt="profile picture"
+                                width="200"
+                                height="200"
+                            />
+                        </p>
+                        <p id="name">Name: {user.name}</p>
+                        <p id="age">Age: {Math.floor(
+                            (new Date(Date.now() - new Date(user.dob).getTime())).getUTCFullYear() - 1970
+                        )}</p>
+                    </div>
+                    <div className="bio-card">
+                        <p id="status">Status:<br />{user.status}</p>
+                        <p id="location">Location:<br />{user.location}</p>
+                        <p id="bio">Bio:<br />{user.bio}</p>
+                    </div>
+                </div>
             </div>
-            <div className="bio-card">
-                <p id="status">Status:<br />{user.status}</p>
-                <p id="location">Location:<br />{user.location}</p>
-                <p id="bio">Bio:<br />{user.bio}</p>
-            </div>
-        </>
-    )} else {
+        );
+    } else {
         return (
-        <>
-            <h1>{user.name}'s Profile</h1>
-            <div className="profile-card">
-                <p>
-                <img
-                src="https://i0.wp.com/eos.org/wp-content/uploads/2025/02/everest-peak.jpg?fit=1200%2C675&ssl=1"
-                alt="profile picture"
-                width="200"
-                height="200"
-                /></p>
-                <p id="name">Name: {user.name}</p>
-                <p id="age">Age: {Math.floor(
-                    (new Date(Date.now() - new Date(user.dob).getTime())).getUTCFullYear() - 1970
-                    )
-                }</p>
+            <div className="profile-page-container">
+                <div className="profile-content">
+                    <h1>{user.name}'s Profile</h1>
+                    <div className="profile-card">
+                        <p>
+                            <img
+                                src="https://i0.wp.com/eos.org/wp-content/uploads/2025/02/everest-peak.jpg?fit=1200%2C675&ssl=1"
+                                alt="profile picture"
+                                width="200"
+                                height="200"
+                            />
+                        </p>
+                        <p id="name">Name: {user.name}</p>
+                        <p id="age">Age: {Math.floor(
+                            (new Date(Date.now() - new Date(user.dob).getTime())).getUTCFullYear() - 1970
+                        )}</p>
+                    </div>
+                    <div className="bio-card">
+                        <p id="status">Status:<br />{user.status}</p>
+                        <p id="location">Location:<br />{user.location}</p>
+                        <p id="bio">Bio:<br />{user.bio}</p>
+                    </div>
+                </div>
             </div>
-            <div className="bio-card">
-                <p id="status">Status:<br />{user.status}</p>
-                <p id="location">Location:<br />{user.location}</p>
-                <p id="bio">Bio:<br />{user.bio}</p>
-            </div>
-        </>
-        )
+        );
     }
 }
