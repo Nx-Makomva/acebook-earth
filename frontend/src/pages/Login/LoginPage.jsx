@@ -13,12 +13,10 @@ export function LoginPage() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    console.log("I AM THE EVENT:", event);
     try {
       const response = await login(email, password);
       localStorage.setItem("token", response.token);
       localStorage.setItem("userId", response.userId);
-      console.log("LOOK AT ME!", response.token)
       window.dispatchEvent(new Event("authChange"));
       navigate(`/posts/feed/${response.userId}`);
 

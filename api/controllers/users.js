@@ -12,8 +12,7 @@ function create(req, res) {
     .save()
     .then((user) => {
       console.log("User created, id:", user._id.toString());
-      const token = generateToken(user.id);
-      res.status(201).json({ token: token, message: "OK" });
+      res.status(201).json({ message: "OK" });
     })
     .catch((err) => {
       if (process.env.NODE_ENV !== "test") {
