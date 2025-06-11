@@ -97,7 +97,6 @@ function App() {
           logo={logo}
           onSearch={searchDatabase}
           users={users}
-          addFriend={HandleAddfriend}
         />
       )}
       <RouterProvider router={router} />

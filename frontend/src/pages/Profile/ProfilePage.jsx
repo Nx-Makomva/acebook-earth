@@ -21,7 +21,6 @@ function decodeToken(token) {
 }
 
 export function ProfilePage({ addFriend }) {
-export function ProfilePage({ addFriend }) {
     const { id } = useParams();
     const navigate = useNavigate();
     const [user, setUser] = useState();
