@@ -133,6 +133,16 @@ async function addFriend(req, res) {
       }
     );
 
+    const updatedFriend = await User.findByIdAndUpdate(
+      friendId,
+      { $addToSet: { friends: userId } }, // $addToSet prevents duplicates
+      {
+        new: true,
+        runValidators: true,
+        select: "name friends",
+      }
+    )
+
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -140,7 +150,9 @@ async function addFriend(req, res) {
     res.status(200).json({
       message: "Friend added successfully",
       user: updatedUser,
+      friend: updatedFriend
     });
+
   } catch (error) {
     res.status(500).json({
       message: "Error adding friend",
