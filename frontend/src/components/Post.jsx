@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Button from "./Button";
+import CommentSection from './CommentSection';
 
 function Post(props) {
-  const { _id, content, image } = props.post;
+  const { _id, content, image, comments = [], username } = props.post;
 
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
@@ -50,7 +51,7 @@ function Post(props) {
       </div>
       
 
-//       <LikeButton initialLikes={likes} postId={_id} />
+{/* //       <LikeButton initialLikes={likes} postId={_id} /> */}
       
       <CommentSection comments={comments} postId={_id} />
     </article>

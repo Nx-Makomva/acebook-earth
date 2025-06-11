@@ -16,16 +16,16 @@ export function FeedPage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
+    const userId = localStorage.getItem('userId')
     if (!token) {
       navigate("/login");
       return;
     }
 //new code added a little similar to the original one
-    getPosts(token)
+    getFeed(userId, token)
       .then((data) => {
-        setPosts(data.posts);
-        localStorage.setItem("token", data.token);
+        setPosts(data);
+        // localStorage.setItem("token", data.token);
       })
       .catch((e) => {
         console.error(e);
