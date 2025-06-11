@@ -1,10 +1,13 @@
+
+import '../../assets/styles/FeedPage.css';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { getPosts } from "../../services/posts";
+import { getFeed } from "../../services/posts";
 import Post from "../../components/Post";
 // import LogoutButton from "../../components/LogoutButton"; // sure whether this is needed.
 import Button from "../../components/Button"; // added
+
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
@@ -13,6 +16,7 @@ export function FeedPage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (!token) {
       navigate("/login");
       return;
@@ -59,6 +63,7 @@ export function FeedPage() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+
     navigate("/login");
   };
 
@@ -100,3 +105,4 @@ export function FeedPage() {
   );
   
 }
+

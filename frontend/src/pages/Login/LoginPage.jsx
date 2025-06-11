@@ -1,19 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import UsersForm from "../../components/UsersForm"
+
 import { login } from "../../services/authentication";
 
 export function LoginPage() {
+  localStorage.removeItem("token");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   async function handleSubmit(event) {
     event.preventDefault();
+    console.log("I AM THE EVENT:", event);
     try {
-      const token = await login(email, password);
-      localStorage.setItem("token", token);
-      navigate("/posts");
+      const response = await login(email, password);
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("userId", response.userId);
+      console.log("LOOK AT ME!", response.token)
+      window.dispatchEvent(new Event("authChange"));
+      navigate(`/posts/feed/${response.userId}`);
+
     } catch (err) {
       console.error(err);
       navigate("/login");
@@ -31,23 +39,17 @@ export function LoginPage() {
   return (
     <>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input
-          id="email"
-          type="text"
-          value={email}
-          onChange={handleEmailChange}
+      <UsersForm
+        email={email}
+        onEmailChange={handleEmailChange}
+        showEmail={true}
+
+        password={password}
+        onPasswordChange={handlePasswordChange} 
+        showPassword={true}
+
+        onSubmit={handleSubmit}
         />
-        <label htmlFor="password">Password:</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        <input role="submit-button" id="submit" type="submit" value="Submit" />
-      </form>
     </>
   );
 }

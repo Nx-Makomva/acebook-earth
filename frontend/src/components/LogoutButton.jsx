@@ -5,6 +5,13 @@ import Button from "./Button";
 const LogoutButton = () => {
     const navigate = useNavigate();
 
+// function LogoutButton() {
+//   function logOut() {
+//     localStorage.removeItem("token");
+//     window.dispatchEvent(new Event('authChange'))
+//     window.location.href = "/"
+//  }
+
     const handleLogout = () => {
         localStorage.removeItem("token");
         navigate("/");
