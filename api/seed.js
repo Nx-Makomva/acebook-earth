@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import bcrypt from "bcrypt";
 import User from "./models/user.js";
 import Post from "./models/post.js";
 
