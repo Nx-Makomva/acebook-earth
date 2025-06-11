@@ -28,6 +28,10 @@ export function LoginPage() {
     }
   }
 
+  function handleCancel() {
+    navigate("/")
+  }
+
   function handleEmailChange(event) {
     setEmail(event.target.value);
   }
@@ -49,6 +53,7 @@ export function LoginPage() {
         showPassword={true}
 
         onSubmit={handleSubmit}
+        onCancel={handleCancel}
         />
     </>
   );

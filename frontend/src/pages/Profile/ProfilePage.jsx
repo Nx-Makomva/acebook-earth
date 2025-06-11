@@ -65,6 +65,17 @@ export function ProfilePage() {
     const handleChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
+    
+    const handleCancel = () => {
+        setFormData({
+            name: user.name || "",
+            dob: user.dob || "",
+            bio: user.bio || "",
+            location: user.location || "",
+            status: user.status || "",
+        });
+        setEditingField(null);
+        };
 
     const handleSubmit = async (event) => {
     event.preventDefault();
@@ -125,6 +136,7 @@ export function ProfilePage() {
                     {editingField === "name" ? (
                         <UsersForm
                             onSubmit={handleSubmit}
+                            onCancel={handleCancel}
                             showName={true}
                             name={formData.name}
                             onNameChange={(event) => handleChange("name", event.target.value)}
@@ -141,6 +153,7 @@ export function ProfilePage() {
                     {editingField === "dob" ? (
                         <UsersForm
                             onSubmit={handleSubmit}
+                            onCancel={handleCancel}
                             showDOB={true}
                             dob={formData.dob}
                             onDOBChange={(event) => handleChange("dob", event.target.value)}
@@ -161,6 +174,7 @@ export function ProfilePage() {
                     {editingField === "status" ? (
                         <UsersForm
                             onSubmit={handleSubmit}
+                            onCancel={handleCancel}
                             showStatus={true}
                             status={formData.status}
                             onStatusChange={(event) => handleChange("status", event.target.value)}
@@ -177,6 +191,7 @@ export function ProfilePage() {
                     {editingField === "location" ? (
                         <UsersForm
                             onSubmit={handleSubmit}
+                            onCancel={handleCancel}
                             showLocation={true}
                             location={formData.location}
                             onLocationChange={(event) => handleChange("location", event.target.value)}
@@ -193,6 +208,7 @@ export function ProfilePage() {
                     {editingField === "bio" ? (
                         <UsersForm
                             onSubmit={handleSubmit}
+                            onCancel={handleCancel}
                             showBio={true}
                             bio={formData.bio}
                             onBioChange={(event) => handleChange("bio", event.target.value)}
@@ -209,7 +225,7 @@ export function ProfilePage() {
     )} else {
         return (
         <>
-            <h1>{user.name}'s Profile</h1>
+            <h1>{user.name}&#39;s Profile</h1>
             <div className="profile-card">
                 <p>
                 <img
@@ -225,9 +241,9 @@ export function ProfilePage() {
                 }</p>
             </div>
             <div className="bio-card">
-                <p id="status">Status:<br />{user.status}</p>
-                <p id="location">Location:<br />{user.location}</p>
-                <p id="bio">Bio:<br />{user.bio}</p>
+                <p id="status"><strong>Status: <br /></strong>{user.status}</p>
+                <p id="location"><strong>Status: <br /></strong>{user.location}</p>
+                <p id="bio"><strong>Status: <br /></strong>{user.bio}</p>
             </div>
         </>
         )
