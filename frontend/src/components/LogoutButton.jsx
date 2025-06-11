@@ -1,35 +1,35 @@
 // To be fixed
-import { LogOutIcon } from "lucide-react";
+// import { LogOutIcon } from "lucide-react";
 
-function LogoutButton({ className }) {
-  function logOut() {
-    localStorage.clear();
-    sessionStorage.clear();
+// function LogoutButton({ className }) {
+//   function logOut() {
+//     localStorage.clear();
+//     sessionStorage.clear();
 
-    localStorage.removeItem("token");
-    window.dispatchEvent(new Event('authChange'));
+//     localStorage.removeItem("token");
+//     window.dispatchEvent(new Event('authChange'));
     
-    window.location.replace("/");
-  }
+//     window.location.replace("/");
+//   }
 
-  return (
-  <button 
-    onClick={logOut} 
-    className={`dropdown-item logout-item ${className}`}
-  >
-    <LogOutIcon className="dropdown-icon" />
-    Log out
-  </button>
-  )
-}
-export default LogoutButton;
+//   return (
+//   <button 
+//     onClick={logOut} 
+//     className={`dropdown-item logout-item ${className}`}
+//   >
+//     <LogOutIcon className="dropdown-icon" />
+//     Log out
+//   </button>
+//   )
+// }
+// export default LogoutButton;
 
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 
 
 const LogoutButton = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
 // function LogoutButton() {
 //   function logOut() {
@@ -39,8 +39,16 @@ const LogoutButton = () => {
 //  }
 
     const handleLogout = () => {
+        // localStorage.removeItem("token");
+
+        // navigate("/");
+        localStorage.clear();
+        sessionStorage.clear();
+
         localStorage.removeItem("token");
-        navigate("/");
+        window.dispatchEvent(new Event('authChange'));
+    
+        window.location.replace("/");
     };
 
     return <Button onClick={handleLogout}>Logout</Button>;
