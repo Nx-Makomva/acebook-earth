@@ -1,7 +1,7 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const token = localStorage.getItem("token");
 
 export async function addFriend(friendId) {
-  const token = localStorage.getItem("token");
 
   const requestOptions = {
     method: "POST",
@@ -23,4 +23,24 @@ export async function addFriend(friendId) {
   } else {
     throw new Error("Failed to add friend");
   }
+}
+
+export async function getAllFriends(id) {
+  console.log("get all friends was called in services")
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  };
+
+  const response = await fetch(`${BACKEND_URL}/users/profile/friends/${id}`, requestOptions)
+
+  if (!response.ok) {
+    throw new Error(`Error fetching friends: ${response.status}`)
+  }
+
+  const data = await response.json()
+  console.log("This is what all friends look like", data)
+  return data
 }
