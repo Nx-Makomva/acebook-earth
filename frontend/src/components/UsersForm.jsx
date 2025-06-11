@@ -75,7 +75,7 @@ function UsersForm(props) {
             className="dob"
             id="dob"
             type="date"
-            value={props.dob}
+            value={props.dob ? props.dob.slice(0, 10) : ""}
             onChange={props.onDOBChange}
             />
             </>
