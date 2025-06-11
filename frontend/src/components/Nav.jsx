@@ -129,12 +129,12 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
                           </p>
                         </div>
                       </a>
-                    <button
+                    {/* <button
                       onClick={() => HandleAddfriend(user._id)}
                       className="ml-3 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                     >
                       Add Friend
-                    </button>
+                    </button> */}
                   </div>
                 ))
               ) : (
