@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 const PostSchema = new mongoose.Schema({
   userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   content: {type: String, required: true},
-  likes: {type: Number, default: 0},
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   image: [imageSchema],
   comments: [commentSchema],
 }, { timestamps: true });

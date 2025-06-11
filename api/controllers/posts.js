@@ -218,6 +218,36 @@ async function deleteComment(req, res) {
 }
 
 
+async function toggleLike(req, res) {
+  const userId = req.userId; 
+  const { postId } = req.params;
+  console.log("I AM USER ID FROM TOGGLE LIKE:", req.body)
+  console.log("I AM POST ID FROM TOGGLE LIKE:", postId)
+  try {
+    const post = await Post.findById(postId);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    console.log("LIKES:", post)
+    const alreadyLiked = post.likes.includes(userId);
+
+    if (alreadyLiked) {
+      post.likes.pull(userId); // remove like
+    } else {
+      post.likes.push(userId); // add like
+    }
+
+    await post.save();
+
+    res.json({ 
+      liked: !alreadyLiked,
+      likesCount: post.likes.length 
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
+
 const PostsController = {
   getAllPosts: getAllPosts,
   createPost: createPost,
@@ -228,6 +258,7 @@ const PostsController = {
   addComment: addComment,
   getComments: getComments,
   deleteComment: deleteComment,
+  toggleLike: toggleLike,
 };
 
 module.exports = PostsController;
