@@ -44,7 +44,6 @@ async function getPostsByFriend(friendId) {
 }
 
 async function getFeed(req, res) {
-  console.log("I HIT THE FUNCTION! YAY!")
   try {
     const userId = req.params.userId; 
     const user = await User.findById(userId);
@@ -52,13 +51,11 @@ async function getFeed(req, res) {
       return res.status(404).json({message: 'User not found.'});
     }
     const friends = user.friends;
-    console.log("I AM YOUR FRIEND:", friends)
 
     // Get posts from all friends in parallel
     const postsArrays = await Promise.all(
       friends.map(friendId => getPostsByFriend(friendId))
     );
-    console.log("HERE ARE SOME POSTS:", postsArrays)
 
     // Flatten array of arrays into a single array of posts
     const allPosts = postsArrays.flat();
@@ -219,15 +216,18 @@ async function deleteComment(req, res) {
 
 
 async function toggleLike(req, res) {
-  const userId = req.userId; 
+  const userId = req.body.userId; 
   const { postId } = req.params;
   console.log("I AM USER ID FROM TOGGLE LIKE:", req.body)
   console.log("I AM POST ID FROM TOGGLE LIKE:", postId)
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized: userId not found" });
+  }
   try {
     const post = await Post.findById(postId);
     if (!post) return res.status(404).json({ message: "Post not found" });
     console.log("LIKES:", post)
-    const alreadyLiked = post.likes.includes(userId);
+    const alreadyLiked = post.likes.map(id => id.toString()).includes(userId);
 
     if (alreadyLiked) {
       post.likes.pull(userId); // remove like

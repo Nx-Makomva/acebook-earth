@@ -42,12 +42,14 @@ import Post from "../../components/Post";
 //   }, [fetchFeed]);
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    setUser(userId)
     const loggedIn = token !== null;
     if (loggedIn) {
       // change to getFeed method
@@ -68,13 +70,15 @@ export function FeedPage() {
     navigate("/login");
     return;
   }
-
+  const likedByCurrentUser = (userId, post) =>{
+    return post.likes.includes(userId)
+  }
   return (
     <>
       <h2>Posts</h2>
       <div className="feed" role="feed">
         {posts.map((post) => (
-          <Post post={post} key={post._id} />
+          <Post post={post} key={post._id} isLiked={likedByCurrentUser(user, post)} />
         ))}
       </div>
     </>

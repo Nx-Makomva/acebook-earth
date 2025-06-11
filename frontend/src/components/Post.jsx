@@ -2,8 +2,10 @@ import LikeButton from './LikeButton';
 import CommentSection from './CommentSection';
 
 function Post(props) {
-  const { _id, content, image, comments = [], likes = 0, username} = props.post;
+  const { _id, content, image, comments = [], likes = [], username} = props.post;
   if (!content?.trim() && (!image || image.length === 0)) return null;
+  console.log(props.post, "FROM POST COMP")
+
   return (
     <article key={_id} className="post-card" style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd' }}>
       <p>{username}</p>
@@ -28,7 +30,7 @@ function Post(props) {
       })}
       
 
-      <LikeButton initialLikes={likes} postId={_id} />
+      <LikeButton initialLiked={props.isLiked} initialLikesCount={likes.length} postId={_id} />
       
       <CommentSection comments={comments} postId={_id} />
     </article>
