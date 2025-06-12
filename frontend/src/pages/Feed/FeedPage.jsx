@@ -23,6 +23,7 @@ export function FeedPage({ refreshTrigger }) {
 
     getFeed(userId, token)
       .then((data) => {
+        console.log("FROM POST ppp:", data)
         setPosts(data);
       })
       .catch((err) => {

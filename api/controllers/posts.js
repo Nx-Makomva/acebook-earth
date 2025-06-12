@@ -1,6 +1,7 @@
 const Post = require("../models/post");
 const { generateToken } = require("../lib/token");
-const User = require("../models/user")
+const User = require("../models/user");
+const Image = require("../models/imageSchema");
 
 async function getAllPosts(req, res) {
 try
@@ -27,20 +28,19 @@ try
 }};
 
 async function getPostsByFriend(friendId) {
-  const posts = await Post.find({ userId: friendId });
-  
-  // Get user data for each post's userId
-  const postsWithUsernames = await Promise.all(
-    posts.map(async (post) => {
-      const user = await User.findById(post.userId);
-      return {
-        ...post.toObject(),
-        username: user.name 
-      };
-    })
-  );
-  
-  return postsWithUsernames;
+  const posts = await Post.find({ userId: friendId })
+    .populate("images")
+    .populate("userId", "name");
+
+  return posts.map(post => ({
+    ...post.toObject(),
+    username: post.userId.name,
+    images: post.images.map(img => ({
+      ...img.toObject(),
+      // Convert Buffer to Base64 string
+      data: img.data ? img.data.toString('base64') : null
+    }))
+  }));
 }
 
 async function getFeed(req, res) {
@@ -73,21 +73,24 @@ async function createPost(req, res) {
   console.log("WE'RE IN CREATE POST", req.body, req.file);
   try {
     const content = req.body.content || '';
+    
     // Validate input
-  if (!content.trim() && !req.file) {
+    if (!content.trim() && !req.file) {
       return res.status(400).json({ message: "Content or image required" });
     }
 
-    // Create new post
+    // Create new post with initialized images array
     const newPost = new Post({
       content,
       userId: req.user_id,
-      likes: [] // Explicitly initialize
+      likes: [],
+      images: [] // Initialize images array here
     });
 
     // Handle image if present
+    let imageData = null;
     if (req.file) {
-      const image = new Image({
+      const newImage = new Image({
         name: req.file.originalname,
         image: {
           data: req.file.buffer,
@@ -95,26 +98,36 @@ async function createPost(req, res) {
         }
       });
       
-      await image.save();
-      newPost.images.push(image._id);
+      await newImage.save();
+      newPost.images.push(newImage._id);
+      imageData = req.file.buffer.toString('base64');
     }
 
     await newPost.save();
 
-    // Generate new token (maintaining your existing flow)
+    // Generate new token
     const newToken = generateToken(req.user_id);
 
-    // Return minimal response with token
-    res.status(201).json({ 
-        _id: newPost._id,
-        content: newPost.content,
-        images: newPost.images,
-        userId: newPost.userId,
-        likes: [], // Ensure likes is always in response
-        createdAt: newPost.createdAt,
+    // Prepare response
+    const response = {
+      _id: newPost._id,
+      content: newPost.content,
+      userId: newPost.userId,
+      likes: newPost.likes,
+      createdAt: newPost.createdAt,
       message: "Post created", 
-      token: newToken 
-  });
+      token: newToken,
+      images: newPost.images.map(imgId => ({
+        _id: imgId,
+        ...(imageData && {
+          name: req.file.originalname,
+          contentType: req.file.mimetype,
+          data: imageData
+        })
+      }))
+    };
+
+    res.status(201).json(response);
 
   } catch (error) {
     console.error("Post creation error:", error);
