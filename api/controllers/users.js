@@ -82,7 +82,7 @@ async function getById(req, res) {
 async function updateUser(req, res) {
   try {
     // Authorisation check: user can only update their own profile
-    if (req.user_id !== req.params.id) {
+    if (String(req.user_id) !== String(req.params.id)) {
       return res
         .status(403)
         .json({

@@ -23,6 +23,10 @@ export function SignupPage() {
     }
   }
 
+  function handleCancel() {
+    navigate("/")
+  }
+
   function handleNameChange(event) {
     setName(event.target.value);
   }
@@ -53,10 +57,7 @@ export function SignupPage() {
         showPassword={true}
 
         onSubmit={handleSubmit}
-        // showLocation={true}
-        // showBio={true}
-        // showDOB={true}
-        // showStatus={true}
+        onCancel={handleCancel}
       />
       <a href="/login">
         <button>Login</button>
