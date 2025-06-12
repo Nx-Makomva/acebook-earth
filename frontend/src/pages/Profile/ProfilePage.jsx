@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { FriendsList } from "../../components/FriendsList";
 import UsersForm from "../../components/UsersForm";
+import Button from "../../components/Button";
 
 function decodeToken(token) {
   if (!token) return null;
@@ -253,38 +254,41 @@ export function ProfilePage({ addFriend }) {
             <div className="profile-actions">
               {isOwnProfile ? (
                 <>
-                  <button 
-                    className="action-btn primary"
+                  <Button 
+                    buttonText="Edit Profile"
+                    buttonIcon={<Edit className="btn-icon" />}
+                    optionalStyling="action-btn primary"
                     onClick={handleEditClick}
-                  >
-                    <Edit className="btn-icon" />
-                    Edit Profile
-                  </button>
-                  <button className="action-btn secondary">
-                    <Settings className="btn-icon" />
-                    Settings
-                  </button>
+                  />
+
+                  <Button 
+                    buttonText="Settings"
+                    buttonIcon={<Settings className="btn-icon" />}
+                    optionalStyling="action-btn secondary"
+                  />
                 </>
               ) : (
                 <>
                   {isFriend ? (
                     <p>We are already friends! No backsies 😤</p>
                   ) : (
-                    <button
-                      className={`action-btn primary ${
+                    <Button 
+                      buttonText={isAddingFriend ? "Adding..." : "Add Friend"}
+                      buttonIcon={<UserPlus className="btn-icon" />}
+                      optionalStyling={`action-btn primary ${
                         isAddingFriend ? "loading" : ""
                       }`}
                       onClick={() => HandleAddfriend(id)}
                       disabled={isAddingFriend}
-                    >
-                      <UserPlus className="btn-icon" />
-                      {isAddingFriend ? "Adding..." : "Add Friend"}
-                    </button>
+                    />
+
                   )}
-                  <button className="action-btn secondary">
-                    <MessageCircle className="btn-icon" />
-                    Message
-                  </button>
+                  <Button 
+                    buttonText="Message"
+                    buttonIcon={<MessageCircle className="btn-icon" />}
+                    optionalStyling="action-btn secondary"
+                  />
+                    
                 </>
               )}
             </div>
@@ -318,37 +322,36 @@ export function ProfilePage({ addFriend }) {
               {/* Field selector buttons */}
               <div className="field-selector">
                 <h3>Select field to edit:</h3>
-                <button 
-                  className={editingField === "name" ? "active" : ""}
+                <Button 
+                  buttonText="Name"
+                  optionalStyling={editingField === "name" ? "active" : ""}
                   onClick={() => setEditingField("name")}
-                >
-                  Name
-                </button>
-                <button 
-                  className={editingField === "dob" ? "active" : ""}
+                  // Find Icon and add styling 
+                />
+                <Button 
+                  buttonText="Date of Birth" 
+                  optionalStyling={editingField === "dob" ? "active" : ""}
                   onClick={() => setEditingField("dob")}
-                >
-                  Date of Birth
-                </button>
-                <button
-                
-                  className={editingField === "bio" ? "active" : ""}
+                />
+
+                <Button 
+                  buttonText="Bio" 
+                  optionalStyling={editingField === "bio" ? "active" : ""}
                   onClick={() => setEditingField("bio")}
-                >
-                  Bio
-                </button>
-                <button 
-                  className={editingField === "location" ? "active" : ""}
+                />
+                  
+                <Button 
+                  buttonText="Location" 
+                  optionalStyling={editingField === "location" ? "active" : ""}
                   onClick={() => setEditingField("location")}
-                >
-                  Location
-                </button>
-                <button 
-                  className={editingField === "status" ? "active" : ""}
+                />
+                
+                <Button 
+                  buttonText="Status" 
+                  optionalStyling={editingField === "status" ? "active" : ""}
                   onClick={() => setEditingField("status")}
-                >
-                  Status
-                </button>
+                />
+
               </div>
             </div>
           </div>
@@ -356,27 +359,28 @@ export function ProfilePage({ addFriend }) {
 
         {/* Tab Navigation between sections */}
         <div className="profile-tabs">
-          <button
-            className={`tab-btn ${activeTab === "about" ? "active" : ""}`}
+          <Button 
+            buttonText="About"
+            buttonIcon={<User className="tab-icon" />}
+            optionalStyling={`tab-btn ${activeTab === "about" ? "active" : ""}`}
             onClick={() => setActiveTab("about")}
-          >
-            <User className="tab-icon" />
-            About
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "friends" ? "active" : ""}`}
+          />
+            
+            
+          <Button 
+            buttonText="Friends"
+            buttonIcon={<Users className="tab-icon" />}
+            optionalStyling={`tab-btn ${activeTab === "friends" ? "active" : ""}`}
             onClick={() => setActiveTab("friends")}
-          >
-            <Users className="tab-icon" />
-            Friends
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "activity" ? "active" : ""}`}
+          />
+          
+          <Button 
+            buttonText="Activity"
+            buttonIcon={<Activity className="tab-icon" />}
+            optionalStyling={`tab-btn ${activeTab === "activity" ? "active" : ""}`}
             onClick={() => setActiveTab("activity")}
-          >
-            <Activity className="tab-icon" />
-            Activity
-          </button>
+          />
+            
         </div>
 
         {/* Tab Content */}
