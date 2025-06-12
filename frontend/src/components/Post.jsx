@@ -1,6 +1,5 @@
-import { useState } from "react";
-import Button from "./Button";
 import CommentSection from './CommentSection';
+import LikeButton from "./LikeButton";
 
 function Post(props) {
   const { _id, content, image, comments = [], likes = [], username} = props.post;
@@ -28,12 +27,6 @@ function Post(props) {
           />
         );
       })}
-
-      <div style={{ marginTop: "10px" }}>
-        <Button onClick={handleLike} variant="default" ariaLabel="like-button">
-          {liked ? "❤️" : "🤍"} {likes}
-        </Button>
-      </div>
       
       <LikeButton initialLiked={props.isLiked} initialLikesCount={likes.length} postId={_id} />
       
