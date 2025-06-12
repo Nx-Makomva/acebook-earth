@@ -1,12 +1,14 @@
 import { Users, UserCheck, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getAllFriends } from "../services/friends";
 
-export function FriendsList({isOwnProfile = false, profileId}) {
+export function FriendsTab({isOwnProfile = false, profileId}) {
   
   const [friends, setFriends] = useState([]);
 
-  // NOTE: good idea to put in a use effector nah? let's see - maybe edit later
+  // NOTE: good idea to put in a use effect or nah? let's see - maybe edit later
+  // add links to navigate to other user profiles when name clicked 
 
   useEffect(() => {
     if (!profileId) return;
@@ -50,6 +52,7 @@ export function FriendsList({isOwnProfile = false, profileId}) {
       </div>
       
       <div className="friends-grid">
+      
         {friends.map((friend) => (
           <div key={friend._id} className="friend-card">
             <div className="friend-avatar-container">
@@ -61,10 +64,11 @@ export function FriendsList({isOwnProfile = false, profileId}) {
               <div className="friend-status-indicator"></div>
             </div>
             
-            <div className="friend-info">
+            <Link to={`/profile/${friend._id}`} className="friend-info">
               <h4 className="friend-name">{friend.name}</h4>
               <p className="friend-status">{friend.status || "Status pending 🥱"}</p>
-            </div>
+            </Link>
+
             
             <div className="friend-actions">
               <button

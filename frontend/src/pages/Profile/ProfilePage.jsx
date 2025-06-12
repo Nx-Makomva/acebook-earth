@@ -2,7 +2,7 @@ import "../../assets/styles/ProfilePage.css";
 
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getById, updateById } from "../../services/users";
+import { getById, updateById, getUserPosts } from "../../services/users";
 import {
   UserPlus,
   MapPin,
@@ -14,7 +14,9 @@ import {
   Users,
   Activity,
 } from "lucide-react";
-import { FriendsList } from "../../components/FriendsList";
+import toast from "react-hot-toast";
+import { FriendsTab } from "../../components/FriendsTab";
+import { ActivityTab } from "../../components/ActivityTab";
 import UsersForm from "../../components/UsersForm";
 import Button from "../../components/Button";
 
@@ -44,6 +46,9 @@ export function ProfilePage({ addFriend }) {
   const [friendCount, setFriendCount] = useState(0);
   const [profileName, setProfileName] = useState(""); // Used simply to format the name of the profile owner
   const [activeTab, setActiveTab] = useState("about"); // about, friends or activity tab
+
+  const [posts, setPosts] = useState([]);
+  const [postCount, setPostCount] = useState(0);
 
   // Edit profile details functionality
   const [isEditing, setIsEditing] = useState(false);
@@ -88,17 +93,33 @@ export function ProfilePage({ addFriend }) {
       });
   }, [id, navigate, token, authenticatedUserId]);
 
+  useEffect(() => {
+    getUserPosts(id)
+      .then((data) => {
+        const posts = data.posts
+        const postCount = data.postCount
+        setPosts(posts)
+        setPostCount(postCount)
+        console.log("These are the posts", posts)
+        console.log("These are the NUMBER of posts", postCount)
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+
+  }, [id])
+
   const checkFrienshipStatus = async () => {
     try {
       const data = await getById(authenticatedUserId);
       const userViewingProfile = data.user;
-      const friendsList = userViewingProfile.friends;
-      console.log("this is friends list broooo", friendsList); // REMOVE
+      const listOfFriends = userViewingProfile.friends;
+      console.log("this is friends list broooo", listOfFriends); // REMOVE
 
-      if (friendsList.includes(id)) {
+      if (listOfFriends.includes(id)) {
         setIsFriend(true);
       }
-      console.log("This is my friends list (the person viewing)", friendsList); // REMOVE
+      console.log("This is my friends list (the person viewing)", listOfFriends); // REMOVE
     } catch (error) {
       console.error("Failed to check friendship status", error);
     }
@@ -184,16 +205,27 @@ export function ProfilePage({ addFriend }) {
     }
   };
 
+    // Message handlers - Not a real functioning method yet
+  const handleMessageClick = () => {
+    if (!isFriend) {
+      toast.error("Woah there eager beaver! You need to be friends to send messages! 👫");
+      return;
+    } else {
+      toast("Easy tiger 🐅 the devs are working on it...")
+    }
+  };
+
   useEffect(() => {
     checkFrienshipStatus();
   }, [friendAddedSuccessfully]);
+
 
   if (notFound) {
     return (
       <div className="profile-page-container">
         <div className="error-container">
           <h1>404 - Profile Not Found</h1>
-          <p>The profile you're looking for doesn't exist.</p>
+          <p>The profile you&#39;re looking for doesn&#39;t exist.</p>
         </div>
       </div>
     );
@@ -204,7 +236,7 @@ export function ProfilePage({ addFriend }) {
       <div className="profile-page-container">
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>Loading profile...</p>
+          <p>...Loading, go and do something useful while you wait.</p>
         </div>
       </div>
     );
@@ -287,6 +319,7 @@ export function ProfilePage({ addFriend }) {
                     buttonText="Message"
                     buttonIcon={<MessageCircle className="btn-icon" />}
                     optionalStyling="action-btn secondary"
+                    onClick={handleMessageClick}
                   />
                     
                 </>
@@ -295,7 +328,6 @@ export function ProfilePage({ addFriend }) {
           </div>
         </div>
 
-        {/* Edit Form Modal/Overlay */}
         {isEditing && (
           <div className="edit-overlay">
             <div className="edit-modal">
@@ -318,16 +350,15 @@ export function ProfilePage({ addFriend }) {
                 onLocationChange={(event) => handleChange("location", event.target.value)}
                 onStatusChange={(event) => handleChange("status", event.target.value)}
               />
-              
-              {/* Field selector buttons */}
+
               <div className="field-selector">
                 <h3>Select field to edit:</h3>
                 <Button 
                   buttonText="Name"
                   optionalStyling={editingField === "name" ? "active" : ""}
                   onClick={() => setEditingField("name")}
-                  // Find Icon and add styling 
                 />
+
                 <Button 
                   buttonText="Date of Birth" 
                   optionalStyling={editingField === "dob" ? "active" : ""}
@@ -339,13 +370,13 @@ export function ProfilePage({ addFriend }) {
                   optionalStyling={editingField === "bio" ? "active" : ""}
                   onClick={() => setEditingField("bio")}
                 />
-                  
+
                 <Button 
                   buttonText="Location" 
                   optionalStyling={editingField === "location" ? "active" : ""}
                   onClick={() => setEditingField("location")}
                 />
-                
+
                 <Button 
                   buttonText="Status" 
                   optionalStyling={editingField === "status" ? "active" : ""}
@@ -365,22 +396,21 @@ export function ProfilePage({ addFriend }) {
             optionalStyling={`tab-btn ${activeTab === "about" ? "active" : ""}`}
             onClick={() => setActiveTab("about")}
           />
-            
-            
+
           <Button 
             buttonText="Friends"
             buttonIcon={<Users className="tab-icon" />}
             optionalStyling={`tab-btn ${activeTab === "friends" ? "active" : ""}`}
             onClick={() => setActiveTab("friends")}
           />
-          
+
           <Button 
             buttonText="Activity"
             buttonIcon={<Activity className="tab-icon" />}
             optionalStyling={`tab-btn ${activeTab === "activity" ? "active" : ""}`}
             onClick={() => setActiveTab("activity")}
           />
-            
+
         </div>
 
         {/* Tab Content */}
@@ -426,12 +456,12 @@ export function ProfilePage({ addFriend }) {
                       <div className="stat-label">Friends</div>
                     </div>
                     <div className="stat-item">
-                      <div className="stat-number">127</div>
+                      <div className="stat-number">{postCount}</div>
                       <div className="stat-label">Posts</div>
                     </div>
                     <div className="stat-item">
-                      <div className="stat-number">1.2k</div>
-                      <div className="stat-label">Likes</div>
+                      <div className="stat-number">{postCount + friendCount}</div>
+                      <div className="stat-label">Cool Points</div>
                     </div>
                   </div>
                 </div>
@@ -441,7 +471,7 @@ export function ProfilePage({ addFriend }) {
 
           {activeTab === "friends" && (
             <div className="friends-tab-content">
-              <FriendsList
+              <FriendsTab
                 isOwnProfile={isOwnProfile}
                 profileId={id}
               />
@@ -450,14 +480,9 @@ export function ProfilePage({ addFriend }) {
 
           {activeTab === "activity" && (
             <div className="profile-card activity-card">
-              <div className="card-header">
-                <h3>Recent Activity</h3>
-              </div>
-              <div className="card-content">
-                <div className="activity-placeholder">
-                  <p>Recent posts and activity will appear here</p>
-                </div>
-              </div>
+              <ActivityTab 
+                posts={posts}
+              />
             </div>
           )}
         </div>

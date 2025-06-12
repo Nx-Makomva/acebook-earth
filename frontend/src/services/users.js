@@ -35,7 +35,6 @@ export async function getById(id) {
 }
 
 export async function updateById(id, update, token) {
-  // const token = localStorage.getItem("token")
   const requestOptions = {
     method: "PUT",
     headers: {
@@ -53,4 +52,25 @@ export async function updateById(id, update, token) {
   }
 
   return await response.json()
+}
+
+export async function getUserPosts(id) {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await fetch(`${
+    BACKEND_URL}/users/profile/activity/${id}`, requestOptions)
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || "Update Failed")
+    }
+
+    const data = await response.json();
+    console.log("This is the users posts, hopefully", data)
+    return data
 }
