@@ -81,20 +81,44 @@ async function getFeed(req, res) {
 // }
 // }
 
+// async function createPost(req, res) {
+//   try {
+//     // Validate required fields
+//     if (req.body.content.trim().length === 0 && !req.body.image) {
+//       return res.status(400).json({ message: "Content or image required" });
+//     }
+    
+//     const post = new Post(req.body);
+//     await post.save(); // Add await here
+    
+//     const newToken = generateToken(req.user_id);
+//     res.status(201).json({ message: "Post created", token: newToken });
+//   } catch (error) {
+//     res.status(500).json({ message: "It's not you, it's me", error });
+//   }
+// }
+
 async function createPost(req, res) {
   try {
-    // Validate required fields
-    if (req.body.content.trim().length === 0 && !req.body.image) {
-      return res.status(400).json({ message: "Content or image required" });
+    const { content } = req.body;
+    const image = req.file ? req.file.filename : null;
+
+    if (!content && !image) {
+      return res.status(400).json({ message: 'Content or image required'});
     }
-    
-    const post = new Post(req.body);
-    await post.save(); // Add await here
-    
+    const post = new Post({
+      content,
+      image,
+      createdAt: new Date()
+    });
+
+    await post.save();
+
     const newToken = generateToken(req.user_id);
-    res.status(201).json({ message: "Post created", token: newToken });
+    res.status(201).json({ message: 'Post created', post, token: newToken});
   } catch (error) {
-    res.status(500).json({ message: "It's not you, it's me", error });
+    console.error('Error in createPost:', error);
+    res.status(500).json({ message: "It's not you, it's me", error});
   }
 }
 

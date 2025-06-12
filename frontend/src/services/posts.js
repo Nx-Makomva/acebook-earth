@@ -34,6 +34,21 @@ export async function getPostById(postId, token) {
 }
 
 
+export async function createPost(formData, token) {
+  const response = await fetch(`${BACKEND_URL}/posts`, {
+    methods: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create post');
+  }
+  return await response.json();
+}
+
 export async function getFeed(userId, token) {
   const response = await fetch(`${BACKEND_URL}/posts/feed/${userId}`, {
     headers: {
@@ -47,24 +62,6 @@ export async function getFeed(userId, token) {
 
   const data = await response.json();
   return data.posts;
-}
-
-
-export async function createPost(postData, token) {
-  const response = await fetch(`${BACKEND_URL}/posts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(postData),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to create post");
-  }
-
-  return await response.json();
 }
 
 
@@ -102,4 +99,3 @@ export async function deletePost(postId, token) {
   const data = await response.json();
   return data.posts; 
 }
-

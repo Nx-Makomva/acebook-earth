@@ -1,8 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-
-
+const path = require('path');
 
 const usersUnprotectedRouter = require("./routes/usersUnprotected");
 const usersProtectedRouter = require("./routes/usersProtected");
@@ -15,6 +14,9 @@ const app = express();
 // Allow requests from any client
 // docs: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 // docs: https://expressjs.com/en/resources/middleware/cors.html
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 app.use(cors());
 
 // Parse JSON request bodies, made available on `req.body`
