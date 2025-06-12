@@ -75,7 +75,7 @@ function UsersForm(props) {
             className="dob"
             id="dob"
             type="date"
-            value={props.dob}
+            value={props.dob ? props.dob.slice(0, 10) : ""}
             onChange={props.onDOBChange}
             />
             </>
@@ -83,7 +83,7 @@ function UsersForm(props) {
 
             {props.showStatus && (
             <>
-            <label htmlFor="status">Status, don't be gross about it.</label>
+            <label htmlFor="status">Status, don&#39;t be gross about it.</label>
             <textarea
             id="status"
             type="text"
@@ -96,6 +96,7 @@ function UsersForm(props) {
             )}
             
             <input role="submit-button" id="submit" type="submit" value="Submit" />
+            <button type="button" onClick={props.onCancel}>Cancel</button>
         </form>
         <p>
             ( * ) required
