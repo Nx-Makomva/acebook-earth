@@ -1,10 +1,21 @@
 import CommentSection from './CommentSection';
 import LikeButton from "./LikeButton";
 import "../assets/styles/Post.css"
+import img1 from "../assets/images/pic-1.webp";
+import img2 from "../assets/images/pic-2.webp";
+import img3 from "../assets/images/pic-3.jpeg";
+import img4 from "../assets/images/pic-4.webp";
+import img5 from "../assets/images/pic-5.jpeg";
+import img6 from "../assets/images/pic-6.webp";
+import img7 from "../assets/images/pic-7.webp";
+
 
 function Post(props) {
   const { _id, content, image, comments = [], likes = [], username} = props.post;
   if (!content?.trim() && (!image || image.length === 0)) return null;
+
+  const defaultImages = [img1, img2, img3, img4, img5, img6, img7]
+  const profilePic = defaultImages[Math.floor(Math.random() * defaultImages.length)]
 
   return (
     <article key={_id} className="post-container">
@@ -13,7 +24,7 @@ function Post(props) {
           <div className="post-avatar-container">
             <img 
               className="post-avatar" 
-              src="/api/placeholder/48/48" 
+              src={profilePic} // This is a placeholder 
               alt={`${username}'s avatar`} 
             />
             <div className="post-user-status"></div>

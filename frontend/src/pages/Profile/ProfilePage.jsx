@@ -50,6 +50,12 @@ export function ProfilePage({ addFriend }) {
   const [posts, setPosts] = useState([]);
   const [postCount, setPostCount] = useState(0);
 
+  const [darkMode, setDarkMode] = useState(() => {
+  const stored = localStorage.getItem("darkMode");
+  return stored ? JSON.parse(stored) : false;
+});
+
+
   // Edit profile details functionality
   const [isEditing, setIsEditing] = useState(false);
   const [editingField, setEditingField] = useState(null);
@@ -125,7 +131,7 @@ export function ProfilePage({ addFriend }) {
     }
   };
 
-  const HandleAddfriend = async (id) => {
+  const HandleAddFriend = async (id) => {
     setIsAddingFriend(true);
     try {
       await addFriend(id);
@@ -134,6 +140,7 @@ export function ProfilePage({ addFriend }) {
     } finally {
       setIsAddingFriend(false);
       setFriendAddedSuccessfully(true);
+      setIsFriend(true)
     }
   };
 
@@ -215,6 +222,37 @@ export function ProfilePage({ addFriend }) {
     }
   };
 
+  const handleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem("darkMode", JSON.stringify(newMode));
+    if (darkMode) {
+      toast('Hello Darkness, my old friend!',
+        {
+          icon: '🥹',
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
+    } 
+    else if (!darkMode) {
+      toast('Why do you need it THIS bright?',
+        {
+          icon: '😳',
+          style: {
+            borderRadius: '10px',
+            background: '#fff',
+            color: '#333',
+          },
+        }
+      );
+    }
+    document.body.classList.toggle("dark-mode", newMode);
+  }
+
   useEffect(() => {
     checkFrienshipStatus();
   }, [friendAddedSuccessfully]);
@@ -294,10 +332,12 @@ export function ProfilePage({ addFriend }) {
                   />
 
                   <Button 
-                    buttonText="Settings"
+                    buttonText={darkMode ? "Dark Mode" : "Light Mode"}
                     buttonIcon={<Settings className="btn-icon" />}
                     optionalStyling="action-btn secondary"
+                    onClick={handleDarkMode}
                   />
+
                 </>
               ) : (
                 <>
@@ -310,7 +350,7 @@ export function ProfilePage({ addFriend }) {
                       optionalStyling={`action-btn primary ${
                         isAddingFriend ? "loading" : ""
                       }`}
-                      onClick={() => HandleAddfriend(id)}
+                      onClick={() => HandleAddFriend(id)}
                       disabled={isAddingFriend}
                     />
 

@@ -1,3 +1,26 @@
+/* DARK MODE SETTINGS */
+
+body.dark-mode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+body.dark-mode .profile-page-container {
+  background-color: #1e1e1e;
+}
+
+body.dark-mode .action-btn.primary {
+  background-color: #333;
+  color: #fff;
+}
+
+body.dark-mode .action-btn.secondary {
+  background-color: #444;
+  color: #ddd;
+}
+
+/* Regular styles */
+
 .profile-page-container {
   padding-top: 100px;
   min-height: 100vh;
