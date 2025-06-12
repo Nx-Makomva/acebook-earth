@@ -177,7 +177,6 @@ async function getFriends(req, res) {
 }
 
 async function getAllFriends(req, res) {
-  console.log("We arrived at get all FRIENDSSS")
   try {
     const { id } = req.params;
 

@@ -26,7 +26,6 @@ export async function addFriend(friendId) {
 }
 
 export async function getAllFriends(id) {
-  console.log("get all friends was called in services")
   const requestOptions = {
     method: "GET",
     headers: {
@@ -41,6 +40,5 @@ export async function getAllFriends(id) {
   }
 
   const data = await response.json()
-  console.log("This is what all friends look like", data)
   return data
 }
