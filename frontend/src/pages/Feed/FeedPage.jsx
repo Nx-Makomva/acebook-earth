@@ -72,12 +72,12 @@ export function FeedPage({ refreshTrigger }) {
       <h2>Posts</h2>
         {/* added below code: div class of my-4 */}
       <div className="my-4"> 
-        <Button
+        {/* <Button
           variant={confirmed ? "cancel" : "confirm"}
           onClick={handleButtonClick}
         >
           {confirmed ? "Cancel Post" : "Confirm Post"}
-        </Button>
+        </Button> */}
       </div>
       {/* added this code below and commented out the original logout button */}
       <div className="my-4">
@@ -90,9 +90,9 @@ export function FeedPage({ refreshTrigger }) {
         </Button> */}
         {/* changed the above button to the below code */}
 
-        <Button variant="cancel" onClick={handleLogout}>
+        {/* <Button variant="cancel" onClick={handleLogout}>
           Log out
-        </Button>
+        </Button> */}
       </div>
 
       <div className="feed" role="feed">

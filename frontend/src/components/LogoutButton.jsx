@@ -2,6 +2,7 @@ import Button from "./Button";
 
 
 const LogoutButton = () => {
+
     const handleLogout = () => {
       localStorage.clear();
       sessionStorage.clear();
