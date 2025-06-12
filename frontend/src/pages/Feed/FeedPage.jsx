@@ -1,18 +1,19 @@
-
 import './FeedPage.css';
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getFeed } from "../../services/posts";
 import Post from "../../components/Post";
+import PostForm from '../../components/PostForm.jsx'
 
 export function FeedPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const fetchFeed = useCallback(() => {
     const token = localStorage.getItem("token");
+// we may need to pass token to callback function bellow
+  const fetchFeed = useCallback(() => {
     if (!token) {
       navigate("/login");
       return;
@@ -32,22 +33,24 @@ export function FeedPage() {
       navigate('/login');
     })
     .finally(() => setLoading(false));
-  }, [navigate]);
+  }, [navigate, token]);
 
   useEffect(() => {
     fetchFeed();
   }, [fetchFeed]);
 
-
 return (
   <>
     <h2 className="feed-title">My Feed</h2>
+
+    <PostForm token={token} onPostCreated={fetchFeed} />
+
     <div className="feed" role="feed">
       {loading ? (
         <p className='loading-feed'>Loading feed...</p>
       ) : posts.length === 0 ? (
         <div className='empty-feed'>
-          Youcould use some friends! Your feed is empty.
+          You could use some friends! Your feed is empty.
           </div>
       ) : (
         posts.map((post) => (

@@ -18,3 +18,18 @@ export async function getFeed(token) {
   const data = await response.json();
   return data;
 }
+
+export async function createPost(formData, token) {
+  const response = await fetch(`${BACKEND_URL}/posts`, {
+    methods: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create post');
+  }
+  return await response.json();
+}
