@@ -44,7 +44,6 @@ async function getPostsByFriend(friendId) {
 }
 
 async function getFeed(req, res) {
-  console.log("I HIT THE FUNCTION! YAY!")
   try {
     const userId = req.params.userId; 
     const user = await User.findById(userId);
@@ -52,13 +51,11 @@ async function getFeed(req, res) {
       return res.status(404).json({message: 'User not found.'});
     }
     const friends = user.friends;
-    console.log("I AM YOUR FRIEND:", friends)
 
     // Get posts from all friends in parallel
     const postsArrays = await Promise.all(
       friends.map(friendId => getPostsByFriend(friendId))
     );
-    console.log("HERE ARE SOME POSTS:", postsArrays)
 
     // Flatten array of arrays into a single array of posts
     const allPosts = postsArrays.flat();
@@ -218,6 +215,39 @@ async function deleteComment(req, res) {
 }
 
 
+async function toggleLike(req, res) {
+  const userId = req.body.userId; 
+  const { postId } = req.params;
+  console.log("I AM USER ID FROM TOGGLE LIKE:", req.body)
+  console.log("I AM POST ID FROM TOGGLE LIKE:", postId)
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized: userId not found" });
+  }
+  try {
+    const post = await Post.findById(postId);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    console.log("LIKES:", post)
+    const alreadyLiked = post.likes.map(id => id.toString()).includes(userId);
+
+    if (alreadyLiked) {
+      post.likes.pull(userId); // remove like
+    } else {
+      post.likes.push(userId); // add like
+    }
+
+    await post.save();
+
+    res.json({ 
+      liked: !alreadyLiked,
+      likesCount: post.likes.length 
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+};
+
+
+
 const PostsController = {
   getAllPosts: getAllPosts,
   createPost: createPost,
@@ -228,6 +258,7 @@ const PostsController = {
   addComment: addComment,
   getComments: getComments,
   deleteComment: deleteComment,
+  toggleLike: toggleLike,
 };
 
 module.exports = PostsController;
