@@ -68,37 +68,31 @@ export function ProfilePage({ addFriend }) {
       });
   }, [id, navigate, token, authenticatedUserId]);
 
-	// CHANGE ADD FRIEND FUNCTION TO BE BI-DIRECTIONAL
-
   const checkFrienshipStatus = async () => {
     try {
       const data = await getById(authenticatedUserId);
       const userViewingProfile = data.user;
       const friendsList = userViewingProfile.friends;
-			console.log("this is friends list broooo", friendsList)
+			console.log("this is friends list broooo", friendsList) // REMOVE
 
       if (friendsList.includes(id)) {
         setIsFriend(true);
       }
-      console.log("This is my friends list (the person viewing)", friendsList);
+      console.log("This is my friends list (the person viewing)", friendsList); // REMOVE
     } catch (error) {
       console.error("Failed to check friendship status", error);
     }
   };
 
   const HandleAddfriend = async (id) => {
-    console.log("This is friendId start func:", id);
     setIsAddingFriend(true);
     try {
       await addFriend(id);
-      console.log("adding friend is:", isAddingFriend);
     } catch (error) {
       console.error("Could not add friend");
     } finally {
       setIsAddingFriend(false);
       setFriendAddedSuccessfully(true);
-      console.log("This is friendId end func:", id);
-      console.log("adding friend is:", isAddingFriend);
     }
   };
 
