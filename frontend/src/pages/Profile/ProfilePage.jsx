@@ -2,7 +2,7 @@ import "../../assets/styles/ProfilePage.css";
 
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getById } from "../../services/users";
+import { getById, updateById } from "../../services/users";
 import {
   UserPlus,
   MapPin,
@@ -15,6 +15,7 @@ import {
   Activity,
 } from "lucide-react";
 import { FriendsList } from "../../components/FriendsList";
+import UsersForm from "../../components/UsersForm";
 
 function decodeToken(token) {
   if (!token) return null;
@@ -39,9 +40,20 @@ export function ProfilePage({ addFriend }) {
   const [isAddingFriend, setIsAddingFriend] = useState(false);
   const [friendAddedSuccessfully, setFriendAddedSuccessfully] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
-	const [friendCount, setFriendCount] = useState(0);
+  const [friendCount, setFriendCount] = useState(0);
   const [profileName, setProfileName] = useState(""); // Used simply to format the name of the profile owner
   const [activeTab, setActiveTab] = useState("about"); // about, friends or activity tab
+
+  // Edit profile details functionality
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingField, setEditingField] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    dob: "",
+    bio: "",
+    location: "",
+    status: "",
+  });
 
   const token = localStorage.getItem("token");
   const decoded = decodeToken(token);
@@ -59,8 +71,15 @@ export function ProfilePage({ addFriend }) {
         setUserProfile(user);
         const userName = user.name.charAt(0).toUpperCase() + user.name.slice(1);
         setProfileName(userName);
-				setFriendCount(user.friends.length)
-				// console.log("The user profiles matessssss", userProfile.friends)
+        setFriendCount(user.friends.length);
+        
+        setFormData({
+          name: user.name || "",
+          dob: user.dob || "",
+          bio: user.bio || "",
+          location: user.location || "",
+          status: user.status || "",
+        });
       })
       .catch((err) => {
         console.error(err);
@@ -73,7 +92,7 @@ export function ProfilePage({ addFriend }) {
       const data = await getById(authenticatedUserId);
       const userViewingProfile = data.user;
       const friendsList = userViewingProfile.friends;
-			console.log("this is friends list broooo", friendsList) // REMOVE
+      console.log("this is friends list broooo", friendsList); // REMOVE
 
       if (friendsList.includes(id)) {
         setIsFriend(true);
@@ -93,6 +112,74 @@ export function ProfilePage({ addFriend }) {
     } finally {
       setIsAddingFriend(false);
       setFriendAddedSuccessfully(true);
+    }
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+    setEditingField("name");
+  };
+
+  const handleChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      name: userProfile.name || "",
+      dob: userProfile.dob || "",
+      bio: userProfile.bio || "",
+      location: userProfile.location || "",
+      status: userProfile.status || "",
+    });
+    setEditingField(null);
+    setIsEditing(false);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const value = formData[editingField];
+
+    if (editingField === "name" && (!value || value.trim() === "")) {
+      console.error("Name cannot be empty");
+      return;
+    }
+
+    try {
+      let updatePayload = { [editingField]: value };
+
+      if (editingField === "dob" && value) {
+        const date = new Date(value);
+        if (isNaN(date)) {
+          console.error("Invalid DOB", value);
+          return;
+        }
+        updatePayload.dob = date.toISOString();
+      }
+
+      console.log("Sending update:", updatePayload);
+
+      const response = await updateById(id, updatePayload, token);
+      console.log("Server Response:", response);
+
+      setUserProfile(prev => ({ 
+        ...prev, 
+        [editingField]: response.updatedUser[editingField] 
+      }));
+      
+      // Update profile name if name was changed
+      if (editingField === "name") {
+        const userName = response.updatedUser.name.charAt(0).toUpperCase() + 
+                        response.updatedUser.name.slice(1);
+        setProfileName(userName);
+      }
+      
+      setEditingField(null);
+      setIsEditing(false);
+
+      console.log("update successful");
+    } catch (err) {
+      console.error("Failed to update:", err);
     }
   };
 
@@ -166,7 +253,10 @@ export function ProfilePage({ addFriend }) {
             <div className="profile-actions">
               {isOwnProfile ? (
                 <>
-                  <button className="action-btn primary">
+                  <button 
+                    className="action-btn primary"
+                    onClick={handleEditClick}
+                  >
                     <Edit className="btn-icon" />
                     Edit Profile
                   </button>
@@ -200,6 +290,69 @@ export function ProfilePage({ addFriend }) {
             </div>
           </div>
         </div>
+
+        {/* Edit Form Modal/Overlay */}
+        {isEditing && (
+          <div className="edit-overlay">
+            <div className="edit-modal">
+              <UsersForm
+                onSubmit={handleSubmit}
+                onCancel={handleCancel}
+                showName={editingField === "name"}
+                showDOB={editingField === "dob"}
+                showBio={editingField === "bio"}
+                showLocation={editingField === "location"}
+                showStatus={editingField === "status"}
+                name={formData.name}
+                dob={formData.dob}
+                bio={formData.bio}
+                location={formData.location}
+                status={formData.status}
+                onNameChange={(event) => handleChange("name", event.target.value)}
+                onDOBChange={(event) => handleChange("dob", event.target.value)}
+                onBioChange={(event) => handleChange("bio", event.target.value)}
+                onLocationChange={(event) => handleChange("location", event.target.value)}
+                onStatusChange={(event) => handleChange("status", event.target.value)}
+              />
+              
+              {/* Field selector buttons */}
+              <div className="field-selector">
+                <h3>Select field to edit:</h3>
+                <button 
+                  className={editingField === "name" ? "active" : ""}
+                  onClick={() => setEditingField("name")}
+                >
+                  Name
+                </button>
+                <button 
+                  className={editingField === "dob" ? "active" : ""}
+                  onClick={() => setEditingField("dob")}
+                >
+                  Date of Birth
+                </button>
+                <button
+                
+                  className={editingField === "bio" ? "active" : ""}
+                  onClick={() => setEditingField("bio")}
+                >
+                  Bio
+                </button>
+                <button 
+                  className={editingField === "location" ? "active" : ""}
+                  onClick={() => setEditingField("location")}
+                >
+                  Location
+                </button>
+                <button 
+                  className={editingField === "status" ? "active" : ""}
+                  onClick={() => setEditingField("status")}
+                >
+                  Status
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Tab Navigation between sections */}
         <div className="profile-tabs">
@@ -265,7 +418,7 @@ export function ProfilePage({ addFriend }) {
                 <div className="card-content">
                   <div className="stats-grid">
                     <div className="stat-item">
-                       <div className="stat-number">{friendCount}</div> {/* This needs to refresh when profile changes */}
+                      <div className="stat-number">{friendCount}</div>
                       <div className="stat-label">Friends</div>
                     </div>
                     <div className="stat-item">
@@ -286,7 +439,7 @@ export function ProfilePage({ addFriend }) {
             <div className="friends-tab-content">
               <FriendsList
                 isOwnProfile={isOwnProfile}
-								profileId={id}
+                profileId={id}
               />
             </div>
           )}

@@ -129,8 +129,8 @@ const seed = async () => {
       {
         userId: users[1]._id,
         username: users[1].name,
-        title: "Too much chaos",
         content: "I knocked over a bookshelf and blamed my vibe.",
+        likes: ['6842fc84eebae9c2ab243e10',]
       },
       {
         userId: users[2]._id,

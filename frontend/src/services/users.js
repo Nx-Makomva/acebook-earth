@@ -34,3 +34,23 @@ export async function getById(id) {
     return data
 }
 
+export async function updateById(id, update, token) {
+  // const token = localStorage.getItem("token")
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(update)
+  }
+
+  const response = await fetch(`${BACKEND_URL}/users/${id}`, requestOptions)
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Update Failed")
+  }
+
+  return await response.json()
+}
