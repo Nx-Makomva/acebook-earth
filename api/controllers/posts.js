@@ -70,17 +70,27 @@ async function getFeed(req, res) {
 
 
 async function createPost(req, res) {
+  console.log("WE'RE IN CREATE POST", req.body, req.file);
   try {
-    if (req.body.content.trim().length === 0 && !req.body.image) {
+    const content = req.body.content || '';
+    // Validate input
+  if (!content.trim() && !req.file) {
       return res.status(400).json({ message: "Content or image required" });
     }
-    
-    const post = new Post(req.body);
+
+    // Create new post
+    const newPost = new Post({
+      content,
+      userId: req.user_id,
+      likes: [] // Explicitly initialize
+    });
+
+    // Handle image if present
     if (req.file) {
       const image = new Image({
         name: req.file.originalname,
         image: {
-          data: req.file.buffer, // Buffer for multer
+          data: req.file.buffer,
           contentType: req.file.mimetype
         }
       });
@@ -88,34 +98,84 @@ async function createPost(req, res) {
       await image.save();
       newPost.images.push(image._id);
     }
-    await post.save(); 
 
+    await newPost.save();
 
+    // Generate new token (maintaining your existing flow)
     const newToken = generateToken(req.user_id);
 
-    // Not sure if we need to populate and return the created post at this point
-    // or if we use the useState on FeedPage to update the feed on POST! button click
-    
-    res.status(201).json({ message: "Post created", token: newToken });
+    // Return minimal response with token
+    res.status(201).json({ 
+        _id: newPost._id,
+        content: newPost.content,
+        images: newPost.images,
+        userId: newPost.userId,
+        likes: [], // Ensure likes is always in response
+        createdAt: newPost.createdAt,
+      message: "Post created", 
+      token: newToken 
+  });
+
   } catch (error) {
-    res.status(500).json({ message: "It's not you, it's me", error });
+    console.error("Post creation error:", error);
+    res.status(500).json({ 
+      message: "Error creating post",
+      error: error.message 
+    });
   }
 }
 
 async function editPost(req, res) {
-  try
-{ const postId = req.params.postId;
-  const updatedPost = await Post.findByIdAndUpdate(postId, req.body,{
-    new: true
-  });
-  if (!updatedPost){
-    return res.status(404).json({message: 'Post not found.'});
+  try {
+    const postId = req.params.postId;
+    
+    // First validate post exists and belongs to user
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    if (post.userId.toString() !== req.user_id) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    // Prepare update object
+    const update = {};
+    if (req.body.content) update.content = req.body.content;
+    
+    // Handle image if present
+    if (req.file) {
+      const image = new Image({
+        name: req.file.originalname,
+        image: {
+          data: req.file.buffer,
+          contentType: req.file.mimetype
+        }
+      });
+      await image.save();
+      update.$push = { images: image._id };
+    }
+
+    // Perform update
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId, 
+      update,
+      { new: true }
+    ).populate('images');
+
+    // Generate new token
+    const newToken = generateToken(req.user_id);
+
+    res.status(200).json({ 
+      post: updatedPost, 
+      token: newToken 
+    });
+  } catch (error) {
+    console.error("Post edit error:", error);
+    res.status(500).json({ 
+      message: "Error updating post",
+      error: error.message 
+    });
   }
-  const token = generateToken(req.user_id);
-  res.status(200).json({ posts: updatedPost, token: token });}
-  catch (error){
-  res.status(500).json({message: "It's not you, it's me", error})
-}
 }
 
 async function deletePost(req, res) {
