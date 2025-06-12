@@ -16,32 +16,11 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 // docs: https://reactrouter.com/en/main/start/overview
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomePage />,
-  },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignupPage />,
-  },
-  {
-    path: "/posts/feed/:userId",
-    element: <FeedPage />,
-  },
-  {
-    path: "/profile/:id",
-    element: <ProfilePage />
-  }
-]);
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [users, setUsers] = useState([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const logo = Logo;
 
   const checkAuth = () => {
@@ -81,10 +60,35 @@ function App() {
     try {
       await addFriend(friendId);
       console.log("friend added:", friendId);
+
+      setRefreshTrigger(prev => prev + 1)
     } catch (error) {
       console.error("Error adding friend", error);
     }
   };
+
+  const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/signup",
+    element: <SignupPage />,
+  },
+  {
+    path: "/posts/feed/:userId",
+    element: <FeedPage refreshTrigger={refreshTrigger}/>,
+  },
+  {
+    path: "/profile/:id",
+    element: <ProfilePage addFriend={HandleAddfriend}/>
+  }
+]);
 
   return (
     <>
@@ -92,7 +96,7 @@ function App() {
         <Nav
           logo={logo}
           onSearch={searchDatabase}
-          users={users} // nav needs users to display them under search field
+          users={users}
           addFriend={HandleAddfriend}
         />
       )}

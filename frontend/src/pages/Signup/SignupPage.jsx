@@ -4,21 +4,6 @@ import UsersForm from "../../components/UsersForm"
 
 import { signup } from "../../services/authentication";
 
-function decodeToken(token) {
-    if (!token) return null;
-
-    try {
-        const payloadBase64 = token.split('.')[1];
-        if (!payloadBase64) return null;
-
-        const decodedPayload = atob(payloadBase64);
-        return JSON.parse(decodedPayload);
-    } catch (error) {
-        console.error("Failed to decode token:", error);
-        return null;
-    }
-}
-
 export function SignupPage() {
   localStorage.removeItem("token");
   const [email, setEmail] = useState("");
@@ -29,16 +14,17 @@ export function SignupPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const token = await signup(name, email, password);
-      localStorage.setItem("token", token)
+      await signup(name, email, password);
       window.dispatchEvent(new Event("authChange"));
-      const decryptedToken = decodeToken(token)
-      const userId = decryptedToken.sub
-      navigate(`/posts/feed/${userId}`); // This now navigates to the feedpage instead of 'login'
+      navigate(`/login`);
     } catch (err) {
       console.error(err);
       navigate("/signup");
     }
+  }
+
+  function handleCancel() {
+    navigate("/")
   }
 
   function handleNameChange(event) {
@@ -71,11 +57,11 @@ export function SignupPage() {
         showPassword={true}
 
         onSubmit={handleSubmit}
-        // showLocation={true}
-        // showBio={true}
-        // showDOB={true}
-        // showStatus={true}
+        onCancel={handleCancel}
       />
+      <a href="/login">
+        <button>Login</button>
+        </a>
     </>
   );
 }

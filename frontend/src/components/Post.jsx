@@ -1,10 +1,10 @@
-import LikeButton from './LikeButton';
+import { useState } from "react";
+import Button from "./Button";
 import CommentSection from './CommentSection';
 
 function Post(props) {
   const { _id, content, image, comments = [], likes = [], username} = props.post;
   if (!content?.trim() && (!image || image.length === 0)) return null;
-  console.log(props.post, "FROM POST COMP")
 
   return (
     <article key={_id} className="post-card" style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd' }}>
@@ -28,8 +28,13 @@ function Post(props) {
           />
         );
       })}
-      
 
+      <div style={{ marginTop: "10px" }}>
+        <Button onClick={handleLike} variant="default" ariaLabel="like-button">
+          {liked ? "❤️" : "🤍"} {likes}
+        </Button>
+      </div>
+      
       <LikeButton initialLiked={props.isLiked} initialLikesCount={likes.length} postId={_id} />
       
       <CommentSection comments={comments} postId={_id} />
