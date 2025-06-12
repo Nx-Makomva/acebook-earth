@@ -68,30 +68,34 @@ async function getFeed(req, res) {
   }
 }
 
-// async function createPost(req, res) {
-//   //we need an error handling
-//   try
-// {  const post = new Post(req.body);
-//   post.save();
-
-//   const newToken = generateToken(req.user_id);
-//   res.status(201).json({ message: "Post created", token: newToken });}
-//   catch (error){
-//   res.status(500).json({message: "It's not you, it's me", error})
-// }
-// }
 
 async function createPost(req, res) {
   try {
-    // Validate required fields
     if (req.body.content.trim().length === 0 && !req.body.image) {
       return res.status(400).json({ message: "Content or image required" });
     }
     
     const post = new Post(req.body);
-    await post.save(); // Add await here
-    
+    if (req.file) {
+      const image = new Image({
+        name: req.file.originalname,
+        image: {
+          data: req.file.buffer, // Buffer for multer
+          contentType: req.file.mimetype
+        }
+      });
+      
+      await image.save();
+      newPost.images.push(image._id);
+    }
+    await post.save(); 
+
+
     const newToken = generateToken(req.user_id);
+
+    // Not sure if we need to populate and return the created post at this point
+    // or if we use the useState on FeedPage to update the feed on POST! button click
+    
     res.status(201).json({ message: "Post created", token: newToken });
   } catch (error) {
     res.status(500).json({ message: "It's not you, it's me", error });
