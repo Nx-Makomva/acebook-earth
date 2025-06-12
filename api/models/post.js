@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 const PostSchema = new mongoose.Schema({
   userId: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   content: {type: String, required: true},
-  likes: {type: Number, default: 0},
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   image: [imageSchema],
   comments: [commentSchema],
 }, { timestamps: true });
@@ -25,15 +25,15 @@ const Post = mongoose.model("Post", PostSchema);
 // These lines will create a test post every time the server starts.
 // You can delete this once you are creating your own posts.
 const dateTimeString = new Date().toLocaleString("en-GB");
-new Post({ content: `Test message, created at ${dateTimeString}`, 
-  //issue how we're calling the below to generate the image
-  image: [{ 
-    name: "puppies.jpeg",
-    image: {
-      data: imageData, 
-      contentType: "image/jpeg"
-    }
-  }]
-}).save();
+// new Post({ content: `Test message, created at ${dateTimeString}`, 
+//   //issue how we're calling the below to generate the image
+//   image: [{ 
+//     name: "puppies.jpeg",
+//     image: {
+//       data: imageData, 
+//       contentType: "image/jpeg"
+//     }
+//   }]
+// }).save();
 
 module.exports = Post;

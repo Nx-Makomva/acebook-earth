@@ -1,3 +1,4 @@
+
 import './FeedPage.css';
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,9 +7,9 @@ import { getFeed } from "../../services/posts";
 import Post from "../../components/Post";
 import PostForm from '../../components/PostForm.jsx'
 
-export function FeedPage() {
+export function FeedPage({ refreshTrigger }) {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
     const token = localStorage.getItem("token");
@@ -54,10 +55,41 @@ return (
           </div>
       ) : (
         posts.map((post) => (
+
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+
+//     const userId = localStorage.getItem("userId");
+//     setUser(userId);
+//     const loggedIn = token !== null;
+//     if (loggedIn) {
+//       getFeed(userId, token)
+//         .then((data) => {
+//           setPosts(data);
+//           console.log("DATA FROM GETFEED:", data);
+//         })
+//         .catch((err) => {
+//           console.error(err);
+//           navigate("/login");
+//         });
+//     }
+//   }, [navigate, refreshTrigger]);
+
+//   const likedByCurrentUser = (userId, post) => {
+//     return post.likes.includes(userId);
+//   };
+
+//   return (
+//     <>
+//       <h2>Posts</h2>
+
+//       <div className="feed" role="feed">
+//         {posts.map((post) => (
+
           <Post
-          post={post}
-          key={post._id}
-          onPostUpdate={fetchFeed}
+            post={post}
+            key={post._id}
+            isLiked={likedByCurrentUser(user, post)}
           />
         ))
         )}
@@ -66,3 +98,4 @@ return (
 );
 
 }
+

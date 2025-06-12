@@ -30,6 +30,7 @@ app.use("/tokens", authenticationRouter);
 
 // 404 Handler
 app.use((_req, res) => {
+  console.log(_req);
   res.status(404).json({ err: "Error 404: Not Found" });
 });
 

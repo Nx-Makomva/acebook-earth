@@ -13,12 +13,12 @@ export async function login(email, password) {
     },
     body: JSON.stringify(payload),
   };
-
   const response = await fetch(`${BACKEND_URL}/tokens`, requestOptions);
 
   if (response.status === 201) {
     let data = await response.json();
-    return data.token;
+
+    return data;
   } else {
     throw new Error(
       `Received status ${response.status} when logging in. Expected 201`

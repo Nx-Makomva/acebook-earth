@@ -14,14 +14,20 @@ export function LoginPage() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      const token = await login(email, password);
-      localStorage.setItem("token", token);
+      const response = await login(email, password);
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("userId", response.userId);
       window.dispatchEvent(new Event("authChange"));
-      navigate("/posts");
+      navigate(`/posts/feed/${response.userId}`);
+
     } catch (err) {
       console.error(err);
       navigate("/login");
     }
+  }
+
+  function handleCancel() {
+    navigate("/")
   }
 
   function handleEmailChange(event) {
@@ -45,7 +51,11 @@ export function LoginPage() {
         showPassword={true}
 
         onSubmit={handleSubmit}
+        onCancel={handleCancel}
         />
+        <a href="/signup">
+        <button>Sign Up</button>
+        </a>
     </>
   );
 }

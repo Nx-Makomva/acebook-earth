@@ -1,23 +1,38 @@
 // docs: https://vitejs.dev/guide/env-and-mode.html
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-export async function getFeed(token) {
-  const requestOptions = {
-    method: "GET",
+export async function getPosts(token) {
+  const response = await fetch(`${BACKEND_URL}/posts`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  };
+  });
 
-  const response = await fetch(`${BACKEND_URL}/posts`, requestOptions);
-
-  if (response.status !== 200) {
-    throw new Error("Unable to fetch posts");
+  if (!response.ok) {
+    throw new Error("Failed to fetch posts");
   }
 
   const data = await response.json();
-  return data;
+  console.log("LOOK AT ALL THIS DATA:" , data)
+  return data.posts;
 }
+
+
+export async function getPostById(postId, token) {
+  const response = await fetch(`${BACKEND_URL}/posts/${postId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch the post");
+  }
+
+  const data = await response.json();
+  return data.post;
+}
+
 
 export async function createPost(formData, token) {
   const response = await fetch(`${BACKEND_URL}/posts`, {
@@ -32,4 +47,55 @@ export async function createPost(formData, token) {
     throw new Error('Failed to create post');
   }
   return await response.json();
+}
+
+export async function getFeed(userId, token) {
+  const response = await fetch(`${BACKEND_URL}/posts/feed/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch feed");
+  }
+
+  const data = await response.json();
+  return data.posts;
+}
+
+
+export async function editPost(postId, postData, token) {
+  const response = await fetch(`${BACKEND_URL}/posts/${postId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(postData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update post");
+  }
+
+  const data = await response.json();
+  return data.posts; 
+}
+
+
+export async function deletePost(postId, token) {
+  const response = await fetch(`${BACKEND_URL}/posts/${postId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete post");
+  }
+
+  const data = await response.json();
+  return data.posts; 
 }

@@ -1,11 +1,19 @@
-function LogoutButton() {
-  function logOut() {
-    localStorage.removeItem("token");
-    window.dispatchEvent(new Event('authChange'))
-    window.location.href = "/"
-  }
+import Button from "./Button";
 
-  return <button onClick={logOut}>Log out</button>;
-}
+
+const LogoutButton = () => {
+
+    const handleLogout = () => {
+      localStorage.clear();
+      sessionStorage.clear();
+
+      localStorage.removeItem("token");
+      window.dispatchEvent(new Event('authChange'));
+      
+      window.location.replace("/");
+    };
+
+    return <Button onClick={handleLogout}>Logout</Button>;
+};
 
 export default LogoutButton;
