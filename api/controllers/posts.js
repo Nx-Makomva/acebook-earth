@@ -33,15 +33,21 @@ async function getPostsByFriend(friendId) {
     .populate("userId", "name");
 
   return posts.map(post => ({
-    ...post.toObject(),
+    _id: post._id,
+    content: post.content,
+    userId: post.userId._id,
     username: post.userId.name,
+    likes: post.likes,
+    createdAt: post.createdAt,
     images: post.images.map(img => ({
-      ...img.toObject(),
-      // Convert Buffer to Base64 string
-      data: img.data ? img.data.toString('base64') : null
+      _id: img._id,
+      name: img.name,
+      contentType: img.image.contentType,
+      data: img.image.data ? img.image.data.toString('base64') : null
     }))
   }));
 }
+
 
 
 async function getFeed(req, res) {
@@ -73,7 +79,7 @@ async function getFeed(req, res) {
 async function createPost(req, res) {
   console.log("WE'RE IN CREATE POST", req.body, req.file);
   try {
-    const content = req.body.content || '';
+    const content = req.body.content || 'Tell me this is a post';
     
     // Validate input
     if (!content.trim() && !req.file) {

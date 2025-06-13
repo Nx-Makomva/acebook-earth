@@ -32,7 +32,10 @@ export function ActivityTab({ posts }) {
       <div className="activity-feed">
         {posts.map((post) => (
           <div key={post._id} className="activity-post-wrapper">
-            <Post post={post} />
+            <Post 
+              post={post}
+              />
+            <p>{post.content}</p>
           </div>
         ))}
       </div>

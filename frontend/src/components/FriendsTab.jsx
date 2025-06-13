@@ -50,6 +50,8 @@ export function FriendsTab({isOwnProfile = false, profileId}) {
       
       <div className="friends-grid">
       
+
+      {/* Profile picture is now just called image */}
         {friends.map((friend) => (
           <div key={friend._id} className="friend-card">
             <div className="friend-avatar-container">

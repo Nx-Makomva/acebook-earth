@@ -1,7 +1,6 @@
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const getComments = async (postId, token) => {
-  console.log("WE HIT THE GET COMMENTS FUNC", token)
   try {
     const response = await fetch(`${BASE_URL}/posts/${postId}/comments`, {
       headers: {
@@ -14,7 +13,6 @@ export const getComments = async (postId, token) => {
     }
     
     const data = await response.json();
-    console.log("HERE ARE THE COMMENTS FROM GET COMMENTS:", data.comments);
     return data.comments;
 
   } catch (error) {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./PostForm.css"; // Create this file for styling
+import "../assets/styles/PostForm.css"; // Create this file for styling
 
 const PostForm = ({ onSubmit, token }) => {
   const [content, setContent] = useState("");
@@ -21,7 +21,9 @@ const PostForm = ({ onSubmit, token }) => {
         formData.append("image", image);
       }
 
+
       await onSubmit(formData, token);
+
       setContent("");
       setImage(null);
     } catch (err) {

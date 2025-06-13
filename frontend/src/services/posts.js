@@ -13,7 +13,6 @@ export async function getPosts(token) {
   }
 
   const data = await response.json();
-  console.log("LOOK AT ALL THIS DATA:" , data)
   return data.posts;
 }
 
@@ -46,13 +45,11 @@ export async function getFeed(userId, token) {
   }
 
   const data = await response.json();
-  console.log("DATA FROM getFeed:", data);
   return data.posts;
 }
 
 
 export async function createPost(postData, token) {
-  console.log("TOKEN FROM CREATE POST FE:", token);
   const response = await fetch(`${BACKEND_URL}/posts`, {
     method: "POST",
     body: postData,

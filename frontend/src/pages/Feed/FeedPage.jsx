@@ -22,7 +22,6 @@ export function FeedPage({ refreshTrigger }) {
 
     getFeed(userId, token)
       .then((data) => {
-        console.log("FROM POST ppp:", data)
         setPosts(data);
       })
       .catch((err) => {
@@ -32,22 +31,19 @@ export function FeedPage({ refreshTrigger }) {
   }, [navigate, refreshTrigger, token]);
 
   const handleCreatePost = async (formData) => {
-    try {
       const newPost = await createPost(formData, token);
       setPosts([newPost, ...posts]); // Add new post at the beginning
-    } catch (err) {
-      throw err; // Let PostForm handle the error
     }
-  };
+ 
 
   const likedByCurrentUser = (userId, post) => {
-    console.log(post);
     return post.likes.includes(userId);
   };
 
   return (
     <>
-      <h2>Posts</h2>
+      <h2>Posts</h2> 
+      {/* Posts to render in order from most recent to oldest */}
       
       {/* Add the PostForm at the top */}
       <PostForm onSubmit={handleCreatePost} token={token} />
