@@ -1,26 +1,321 @@
 /* DARK MODE SETTINGS */
 
+/* Root variables for consistent theming */
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --dark-primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --dark-secondary-gradient: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  --dark-accent-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
 body.dark-mode {
-  background-color: #121212;
-  color: #f0f0f0;
+  background: var(--dark-primary-gradient);
+  color: #f8fafc;
+  transition: all 0.3s ease;
 }
 
+/* Dark mode container */
 body.dark-mode .profile-page-container {
-  background-color: #1e1e1e;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  position: relative;
 }
 
+body.dark-mode .profile-page-container::before {
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dark-grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="0.8" fill="white" fill-opacity="0.02"/><circle cx="75" cy="25" r="0.6" fill="white" fill-opacity="0.015"/><circle cx="50" cy="50" r="0.7" fill="white" fill-opacity="0.025"/><circle cx="25" cy="75" r="0.5" fill="white" fill-opacity="0.01"/><circle cx="75" cy="75" r="0.9" fill="white" fill-opacity="0.03"/></pattern></defs><rect width="100" height="100" fill="url(%23dark-grain)"/></svg>');
+}
+
+/* Profile hero dark mode */
+body.dark-mode .profile-hero {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Profile cover dark mode */
+body.dark-mode .profile-cover {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4, #10b981);
+  background-size: 400% 400%;
+}
+
+/* Profile avatar dark mode */
+body.dark-mode .profile-avatar {
+  border: 6px solid rgba(15, 23, 42, 0.9);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .avatar-status-indicator {
+  background: #10b981;
+  border: 4px solid rgba(15, 23, 42, 0.9);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+/* Profile text elements */
+body.dark-mode .profile-name {
+  color: #f8fafc;
+  background: linear-gradient(135deg, #a5b4fc, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode .profile-status {
+  color: #94a3b8;
+}
+
+body.dark-mode .meta-item {
+  color: #cbd5e1;
+}
+
+body.dark-mode .meta-icon {
+  color: #94a3b8;
+}
+
+/* Action buttons dark mode */
 body.dark-mode .action-btn.primary {
-  background-color: #333;
-  color: #fff;
+  background: var(--dark-primary-gradient);
+  color: #f8fafc;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+}
+
+body.dark-mode .action-btn.primary:hover {
+  box-shadow: 0 15px 40px rgba(99, 102, 241, 0.6);
+  transform: translateY(-3px);
 }
 
 body.dark-mode .action-btn.secondary {
-  background-color: #444;
-  color: #ddd;
+  background: rgba(30, 41, 59, 0.9);
+  color: #e2e8f0;
+  border: 2px solid rgba(99, 102, 241, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .action-btn.secondary:hover {
+  background: rgba(51, 65, 85, 0.9);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
+}
+
+/* Tab navigation dark mode */
+body.dark-mode .profile-tabs {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .tab-btn {
+  color: #94a3b8;
+}
+
+body.dark-mode .tab-btn:hover {
+  color: #e2e8f0;
+  background: rgba(99, 102, 241, 0.2);
+}
+
+body.dark-mode .tab-btn.active {
+  background: var(--dark-primary-gradient);
+  color: #f8fafc;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* Profile cards dark mode */
+body.dark-mode .profile-card {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .profile-card:hover {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+body.dark-mode .card-header {
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+body.dark-mode .card-header h3 {
+  color: #f8fafc;
+  background: linear-gradient(135deg, #a5b4fc, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* About section dark mode */
+body.dark-mode .about-section h4 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .bio-text,
+body.dark-mode .status-text,
+body.dark-mode .location-text {
+  color: #cbd5e1;
+}
+
+/* Stats card dark mode */
+body.dark-mode .stat-item {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .stat-number {
+  color: #f8fafc;
+  background: linear-gradient(135deg, #a5b4fc, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode .stat-label {
+  color: #94a3b8;
+}
+
+/* Friends tab dark mode */
+body.dark-mode .friends-tab-content {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* Activity tab dark mode */
+body.dark-mode .activity-tab-container {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .activity-header {
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+body.dark-mode .activity-header h3 {
+  color: #f8fafc;
+  background: linear-gradient(135deg, #a5b4fc, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode .activity-count {
+  background: rgba(99, 102, 241, 0.2);
+  color: #e2e8f0;
+}
+
+/* Scrollbar dark mode */
+body.dark-mode .activity-feed::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+body.dark-mode .activity-feed::-webkit-scrollbar-thumb {
+  background: var(--dark-primary-gradient);
+}
+
+body.dark-mode .activity-feed::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+}
+
+/* Activity posts dark mode */
+body.dark-mode .activity-post {
+  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+body.dark-mode .activity-post:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+body.dark-mode .post-username {
+  color: #f8fafc;
+}
+
+body.dark-mode .post-timestamp {
+  color: #94a3b8;
+}
+
+body.dark-mode .post-menu-btn {
+  color: #94a3b8;
+}
+
+body.dark-mode .post-menu-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+}
+
+body.dark-mode .post-text {
+  color: #e2e8f0;
+}
+
+body.dark-mode .post-actions {
+  border-top: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+body.dark-mode .action-button {
+  color: #94a3b8;
+}
+
+body.dark-mode .action-button:hover {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+}
+
+/* Specific action button colors */
+body.dark-mode .like-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+body.dark-mode .comment-btn:hover {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+}
+
+body.dark-mode .share-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+/* Empty state dark mode */
+body.dark-mode .activity-empty-state h4 {
+  color: #e2e8f0;
+}
+
+body.dark-mode .activity-empty-state p {
+  color: #94a3b8;
+}
+
+/* Edit overlay dark mode */
+body.dark-mode .edit-overlay {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+body.dark-mode .edit-modal {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+}
+
+/* Loading states dark mode */
+body.dark-mode .loading-container p,
+body.dark-mode .error-container p {
+  color: rgba(248, 250, 252, 0.9);
+}
+
+body.dark-mode .error-container h1 {
+  color: #f8fafc;
+}
+
+body.dark-mode .loading-spinner {
+  border: 4px solid rgba(248, 250, 252, 0.1);
+  border-top: 4px solid #a5b4fc;
 }
 
 /* Regular styles */
-
 .profile-page-container {
   padding-top: 100px;
   min-height: 100vh;
@@ -408,7 +703,7 @@ body.dark-mode .action-btn.secondary {
   font-style: italic;
 }
 
-/* Stats Card - FIXED */
+/* Stats Card */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -515,7 +810,7 @@ body.dark-mode .action-btn.secondary {
   overflow-y: auto;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar stuff */
 .activity-feed::-webkit-scrollbar {
   width: 6px;
 }
@@ -771,6 +1066,204 @@ body.dark-mode .action-btn.secondary {
   max-width: 400px;
   line-height: 1.6;
   margin: 0;
+}
+
+.field-selector {
+  max-width: 500px;
+  margin: 0 auto 2rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.field-selector::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" fill-opacity="0.05"/><circle cx="75" cy="25" r="1" fill="white" fill-opacity="0.03"/><circle cx="50" cy="50" r="1" fill="white" fill-opacity="0.04"/><circle cx="25" cy="75" r="1" fill="white" fill-opacity="0.02"/><circle cx="75" cy="75" r="1" fill="white" fill-opacity="0.06"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  pointer-events: none;
+  z-index: 0;
+}
+
+.field-selector > * {
+  position: relative;
+  z-index: 1;
+}
+
+.field-selector:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+}
+
+.field-selector h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.field-selector h3::after {
+  content: "";
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 2px;
+}
+
+/* Field Selector Button Styles */
+.field-selector-button {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(102, 126, 234, 0.1);
+  border-radius: 12px;
+  color: #374151;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.field-selector-button:last-child {
+  margin-bottom: 0;
+}
+
+.field-selector-button:hover {
+  border-color: rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.field-selector-button:active {
+  transform: translateY(0);
+}
+
+/* Active State */
+.field-selector-button.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+.field-selector-button.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.field-selector-button.active:hover::before {
+  left: 100%;
+}
+
+.field-selector-button.active:hover {
+  box-shadow: 0 16px 45px rgba(102, 126, 234, 0.5);
+}
+
+/* Icon Styles */
+.field-selector-button svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s ease;
+}
+
+.field-selector-button:hover svg {
+  transform: scale(1.1);
+}
+
+.field-selector-button.active svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* DARK MODE STYLES */
+body.dark-mode .field-selector {
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .field-selector::before {
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain-dark" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" fill-opacity="0.02"/><circle cx="75" cy="25" r="1" fill="white" fill-opacity="0.01"/><circle cx="50" cy="50" r="1" fill="white" fill-opacity="0.015"/><circle cx="25" cy="75" r="1" fill="white" fill-opacity="0.008"/><circle cx="75" cy="75" r="1" fill="white" fill-opacity="0.025"/></pattern></defs><rect width="100" height="100" fill="url(%23grain-dark)"/></svg>');
+}
+
+body.dark-mode .field-selector:hover {
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .field-selector h3 {
+  color: #f0f0f0;
+  background: linear-gradient(135deg, #8b9efc, #9d7dd8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark-mode .field-selector h3::after {
+  background: linear-gradient(135deg, #8b9efc, #9d7dd8);
+}
+
+body.dark-mode .field-selector-button {
+  background: rgba(55, 65, 81, 0.8);
+  border: 2px solid rgba(139, 158, 252, 0.2);
+  color: #d1d5db;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .field-selector-button:hover {
+  background: rgba(55, 65, 81, 0.95);
+  border-color: rgba(139, 158, 252, 0.4);
+  box-shadow: 0 8px 25px rgba(139, 158, 252, 0.2);
+}
+
+body.dark-mode .field-selector-button.active {
+  background: linear-gradient(135deg, #8b9efc, #9d7dd8);
+  box-shadow: 0 12px 35px rgba(139, 158, 252, 0.4);
+}
+
+body.dark-mode .field-selector-button.active:hover {
+  box-shadow: 0 16px 45px rgba(139, 158, 252, 0.5);
 }
 
 /* Responsive Design */

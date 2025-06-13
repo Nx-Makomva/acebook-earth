@@ -13,6 +13,8 @@ import {
   User,
   Users,
   Activity,
+  FileText,
+  MessageSquare
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { FriendsTab } from "../../components/FriendsTab";
@@ -106,8 +108,6 @@ export function ProfilePage({ addFriend }) {
         const postCount = data.postCount
         setPosts(posts)
         setPostCount(postCount)
-        console.log("These are the posts", posts)
-        console.log("These are the NUMBER of posts", postCount)
       })
       .catch((error) => {
         console.error(error);
@@ -226,7 +226,7 @@ export function ProfilePage({ addFriend }) {
     const newMode = !darkMode;
     setDarkMode(newMode);
     localStorage.setItem("darkMode", JSON.stringify(newMode));
-    if (darkMode) {
+    if (newMode) {
       toast('Hello Darkness, my old friend!',
         {
           icon: '🥹',
@@ -238,7 +238,7 @@ export function ProfilePage({ addFriend }) {
         }
       );
     } 
-    else if (!darkMode) {
+    else if (!newMode) {
       toast('Why do you need it THIS bright?',
         {
           icon: '😳',
@@ -332,7 +332,7 @@ export function ProfilePage({ addFriend }) {
                   />
 
                   <Button 
-                    buttonText={darkMode ? "Dark Mode" : "Light Mode"}
+                    buttonText={darkMode ? "Light Mode" : "Dark Mode"}
                     buttonIcon={<Settings className="btn-icon" />}
                     optionalStyling="action-btn secondary"
                     onClick={handleDarkMode}
@@ -395,34 +395,38 @@ export function ProfilePage({ addFriend }) {
                 <h3>Select field to edit:</h3>
                 <Button 
                   buttonText="Name"
-                  optionalStyling={editingField === "name" ? "active" : ""}
+                  ButtonIcon={User}
+                  optionalStyling={`field-selector-button ${editingField === "name" ? "active" : ""}`}
                   onClick={() => setEditingField("name")}
                 />
 
                 <Button 
                   buttonText="Date of Birth" 
-                  optionalStyling={editingField === "dob" ? "active" : ""}
+                  ButtonIcon={Calendar}
+                  optionalStyling={`field-selector-button ${editingField === "dob" ? "active" : ""}`}
                   onClick={() => setEditingField("dob")}
                 />
 
                 <Button 
                   buttonText="Bio" 
-                  optionalStyling={editingField === "bio" ? "active" : ""}
+                  ButtonIcon={FileText}
+                  optionalStyling={`field-selector-button ${editingField === "bio" ? "active" : ""}`}
                   onClick={() => setEditingField("bio")}
                 />
 
                 <Button 
                   buttonText="Location" 
-                  optionalStyling={editingField === "location" ? "active" : ""}
+                  ButtonIcon={MapPin}
+                  optionalStyling={`field-selector-button ${editingField === "location" ? "active" : ""}`}
                   onClick={() => setEditingField("location")}
                 />
 
                 <Button 
                   buttonText="Status" 
-                  optionalStyling={editingField === "status" ? "active" : ""}
+                  ButtonIcon={MessageSquare}
+                  optionalStyling={`field-selector-button ${editingField === "status" ? "active" : ""}`}
                   onClick={() => setEditingField("status")}
                 />
-
               </div>
             </div>
           </div>
@@ -500,7 +504,7 @@ export function ProfilePage({ addFriend }) {
                       <div className="stat-label">Posts</div>
                     </div>
                     <div className="stat-item">
-                      <div className="stat-number">{postCount + friendCount}</div>
+                      <div className="stat-number">{postCount * friendCount}</div>
                       <div className="stat-label">Cool Points</div>
                     </div>
                   </div>

@@ -3,20 +3,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllFriends } from "../services/friends";
 
-// import img1 from "../assets/images/pic-1.webp";
-// import img2 from "../assets/images/pic-2.webp";
-// import img3 from "../assets/images/pic-3.jpeg";
-// import img4 from "../assets/images/pic-4.webp";
-// import img5 from "../assets/images/pic-5.jpeg";
-// import img6 from "../assets/images/pic-6.webp";
-// import img7 from "../assets/images/pic-7.webp";
-
 export function FriendsTab({isOwnProfile = false, profileId}) {
   
   const [friends, setFriends] = useState([]);
-
-  // const defaultImages = [img1, img2, img3, img4, img5, img6, img7]
-  // const profilePic = defaultImages[Math.floor(Math.random() * defaultImages.length)]
 
   useEffect(() => {
     if (!profileId) return;

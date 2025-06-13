@@ -1,0 +1,380 @@
+.userFormContainer {
+max-width: 500px;
+margin: 0 auto;
+padding: 2rem;
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(20px);
+border-radius: 24px;
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+border: 1px solid rgba(255, 255, 255, 0.3);
+position: relative;
+overflow: hidden;
+transition: all 0.3s ease;
+}
+
+.userFormContainer::before {
+content: "";
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" fill-opacity="0.05"/><circle cx="75" cy="25" r="1" fill="white" fill-opacity="0.03"/><circle cx="50" cy="50" r="1" fill="white" fill-opacity="0.04"/><circle cx="25" cy="75" r="1" fill="white" fill-opacity="0.02"/><circle cx="75" cy="75" r="1" fill="white" fill-opacity="0.06"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+pointer-events: none;
+z-index: 0;
+}
+
+.userFormContainer > * {
+position: relative;
+z-index: 1;
+}
+
+.userFormContainer:hover {
+transform: translateY(-2px);
+box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+}
+
+.userFormContainer h2 {
+font-size: 2rem;
+font-weight: 700;
+color: #1f2937;
+margin-bottom: 2rem;
+text-align: center;
+background: linear-gradient(135deg, #667eea, #764ba2);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+position: relative;
+}
+
+.userFormContainer h2::after {
+content: "";
+position: absolute;
+bottom: -0.5rem;
+left: 50%;
+transform: translateX(-50%);
+width: 60px;
+height: 3px;
+background: linear-gradient(135deg, #667eea, #764ba2);
+border-radius: 2px;
+}
+
+.userFormContainer form {
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+}
+
+.userFormContainer label {
+font-size: 0.95rem;
+font-weight: 600;
+color: #374151;
+margin-bottom: 0.5rem;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+transition: color 0.3s ease;
+}
+
+.userFormContainer input,
+.userFormContainer textarea {
+width: 100%;
+padding: 12px 16px;
+border: 2px solid rgba(102, 126, 234, 0.1);
+border-radius: 12px;
+font-size: 1rem;
+color: #374151;
+background: rgba(255, 255, 255, 0.8);
+backdrop-filter: blur(10px);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+box-sizing: border-box;
+position: relative;
+}
+
+.userFormContainer input:focus,
+.userFormContainer textarea:focus {
+outline: none;
+border-color: #667eea;
+box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+background: rgba(255, 255, 255, 0.95);
+transform: translateY(-1px);
+}
+
+.userFormContainer input::placeholder,
+.userFormContainer textarea::placeholder {
+color: #9ca3af;
+font-style: italic;
+}
+
+.userFormContainer textarea {
+resize: vertical;
+min-height: 100px;
+font-family: inherit;
+line-height: 1.5;
+}
+
+.userFormContainer input[type="date"] {
+position: relative;
+}
+
+.userFormContainer input[type="date"]::-webkit-calendar-picker-indicator {
+background: linear-gradient(135deg, #667eea, #764ba2);
+border-radius: 4px;
+padding: 2px;
+cursor: pointer;
+}
+
+/* Submit Button */
+.userFormContainer input[type="submit"] {
+background: linear-gradient(135deg, #667eea, #764ba2);
+color: white;
+font-weight: 600;
+font-size: 1rem;
+padding: 14px 24px;
+border: none;
+border-radius: 12px;
+cursor: pointer;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+overflow: hidden;
+margin-top: 1rem;
+box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.userFormContainer input[type="submit"]::before {
+content: "";
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(
+	90deg,
+	transparent,
+	rgba(255, 255, 255, 0.2),
+	transparent
+);
+transition: left 0.5s;
+}
+
+.userFormContainer input[type="submit"]:hover::before {
+left: 100%;
+}
+
+.userFormContainer input[type="submit"]:hover {
+transform: translateY(-2px);
+box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+}
+
+.userFormContainer input[type="submit"]:active {
+transform: translateY(0);
+}
+
+/* Cancel Button */
+.userFormContainer button[type="button"] {
+background: rgba(255, 255, 255, 0.9);
+color: #374151;
+font-weight: 600;
+font-size: 1rem;
+padding: 14px 24px;
+border: 2px solid rgba(102, 126, 234, 0.2);
+border-radius: 12px;
+cursor: pointer;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+position: relative;
+overflow: hidden;
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.userFormContainer button[type="button"]:hover {
+background: rgba(102, 126, 234, 0.1);
+border-color: rgba(102, 126, 234, 0.4);
+transform: translateY(-2px);
+box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.userFormContainer button[type="button"]:active {
+transform: translateY(0);
+}
+
+/* Form Actions Container */
+.userFormContainer form > input[type="submit"],
+.userFormContainer form > button[type="button"] {
+margin-top: 0.5rem;
+}
+
+/* Required Note */
+.userFormContainer p {
+text-align: center;
+font-size: 0.875rem;
+color: #6b7280;
+font-style: italic;
+margin-top: 1.5rem;
+margin-bottom: 0;
+}
+
+/* Field Groups */
+.userFormContainer > form > label + input,
+.userFormContainer > form > label + textarea {
+margin-top: 0;
+}
+
+/* Enhanced Focus States */
+.userFormContainer input:hover,
+.userFormContainer textarea:hover {
+border-color: rgba(102, 126, 234, 0.3);
+box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+/* DARK MODE STYLES */
+body.dark-mode .userFormContainer {
+background: rgba(30, 30, 30, 0.95);
+border: 1px solid rgba(255, 255, 255, 0.1);
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .userFormContainer::before {
+background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain-dark" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" fill-opacity="0.02"/><circle cx="75" cy="25" r="1" fill="white" fill-opacity="0.01"/><circle cx="50" cy="50" r="1" fill="white" fill-opacity="0.015"/><circle cx="25" cy="75" r="1" fill="white" fill-opacity="0.008"/><circle cx="75" cy="75" r="1" fill="white" fill-opacity="0.025"/></pattern></defs><rect width="100" height="100" fill="url(%23grain-dark)"/></svg>');
+}
+
+body.dark-mode .userFormContainer:hover {
+box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .userFormContainer h2 {
+color: #f0f0f0;
+background: linear-gradient(135deg, #8b9efc, #9d7dd8);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+body.dark-mode .userFormContainer h2::after {
+background: linear-gradient(135deg, #8b9efc, #9d7dd8);
+}
+
+body.dark-mode .userFormContainer label {
+color: #d1d5db;
+}
+
+body.dark-mode .userFormContainer input,
+body.dark-mode .userFormContainer textarea {
+background: rgba(55, 65, 81, 0.8);
+border: 2px solid rgba(139, 158, 252, 0.2);
+color: #f0f0f0;
+}
+
+body.dark-mode .userFormContainer input:focus,
+body.dark-mode .userFormContainer textarea:focus {
+background: rgba(55, 65, 81, 0.95);
+border-color: #8b9efc;
+box-shadow: 0 0 0 4px rgba(139, 158, 252, 0.2);
+}
+
+body.dark-mode .userFormContainer input:hover,
+body.dark-mode .userFormContainer textarea:hover {
+border-color: rgba(139, 158, 252, 0.4);
+box-shadow: 0 2px 8px rgba(139, 158, 252, 0.2);
+}
+
+body.dark-mode .userFormContainer input::placeholder,
+body.dark-mode .userFormContainer textarea::placeholder {
+color: #9ca3af;
+}
+
+body.dark-mode
+.userFormContainer
+input[type="date"]::-webkit-calendar-picker-indicator {
+background: linear-gradient(135deg, #8b9efc, #9d7dd8);
+filter: invert(1);
+}
+
+body.dark-mode .userFormContainer input[type="submit"] {
+background: linear-gradient(135deg, #8b9efc, #9d7dd8);
+box-shadow: 0 8px 25px rgba(139, 158, 252, 0.4);
+}
+
+body.dark-mode .userFormContainer input[type="submit"]:hover {
+box-shadow: 0 12px 35px rgba(139, 158, 252, 0.5);
+}
+
+body.dark-mode .userFormContainer button[type="button"] {
+background: rgba(55, 65, 81, 0.9);
+color: #d1d5db;
+border: 2px solid rgba(139, 158, 252, 0.3);
+box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .userFormContainer button[type="button"]:hover {
+background: rgba(139, 158, 252, 0.2);
+border-color: rgba(139, 158, 252, 0.5);
+box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .userFormContainer p {
+color: #9ca3af;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+.userFormContainer {
+	margin: 1rem;
+	padding: 1.5rem;
+	max-width: none;
+}
+
+.userFormContainer h2 {
+	font-size: 1.75rem;
+	margin-bottom: 1.5rem;
+}
+
+.userFormContainer form {
+	gap: 1.25rem;
+}
+
+.userFormContainer input,
+.userFormContainer textarea {
+	padding: 10px 14px;
+	font-size: 0.95rem;
+}
+
+.userFormContainer input[type="submit"],
+.userFormContainer button[type="button"] {
+	padding: 12px 20px;
+	font-size: 0.95rem;
+}
+}
+
+@media (max-width: 480px) {
+.userFormContainer {
+	margin: 0.5rem;
+	padding: 1rem;
+	border-radius: 16px;
+}
+
+.userFormContainer h2 {
+	font-size: 1.5rem;
+	margin-bottom: 1rem;
+}
+
+.userFormContainer form {
+	gap: 1rem;
+}
+
+.userFormContainer label {
+	font-size: 0.875rem;
+}
+
+.userFormContainer input,
+.userFormContainer textarea {
+	padding: 8px 12px;
+	font-size: 0.9rem;
+	border-radius: 10px;
+}
+
+.userFormContainer input[type="submit"],
+.userFormContainer button[type="button"] {
+	padding: 10px 18px;
+	font-size: 0.9rem;
+	border-radius: 10px;
+}
+}
