@@ -49,7 +49,7 @@ export function FriendsTab({isOwnProfile = false, profileId}) {
       </div>
       
       <div className="friends-grid">
-      
+      {/* LOOK INTO rendering user.image */}
         {friends.map((friend) => (
           <div key={friend._id} className="friend-card">
             <div className="friend-avatar-container">

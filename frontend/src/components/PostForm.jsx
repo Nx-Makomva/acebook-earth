@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./PostForm.css"; // Create this file for styling
+import "./PostForm.css"; 
 
 const PostForm = ({ onSubmit, token }) => {
   const [content, setContent] = useState("");

@@ -49,8 +49,6 @@ export function FeedPage({ refreshTrigger }) {
   return (
     <>
       <h2>Posts</h2>
-      
-      {/* Add the PostForm at the top */}
       <PostForm onSubmit={handleCreatePost} token={token} />
       
       <div className="feed" role="feed">
