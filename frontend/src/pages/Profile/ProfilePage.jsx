@@ -504,7 +504,7 @@ export function ProfilePage({ addFriend }) {
                       <div className="stat-label">Posts</div>
                     </div>
                     <div className="stat-item">
-                      <div className="stat-number">{postCount * friendCount}</div>
+                      <div className="stat-number">{postCount + friendCount *10}</div>
                       <div className="stat-label">Cool Points</div>
                     </div>
                   </div>
