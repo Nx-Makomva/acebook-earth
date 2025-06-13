@@ -1,7 +1,7 @@
 import Button from "./Button";
+import { LogOutIcon } from "lucide-react";
 
-
-const LogoutButton = () => {
+const LogoutButton = ({ className }) => {
 
     const handleLogout = () => {
       localStorage.clear();
@@ -13,7 +13,14 @@ const LogoutButton = () => {
       window.location.replace("/");
     };
 
-    return <Button onClick={handleLogout}>Logout</Button>;
+    return (
+    <Button 
+      onClick={handleLogout}
+      buttonIcon={<LogOutIcon className="dropdown-icon" />}
+      buttonText="Log out"
+      optionalStyling={`dropdown-item logout-item ${className}`}
+    />
+  )
 };
 
 export default LogoutButton;

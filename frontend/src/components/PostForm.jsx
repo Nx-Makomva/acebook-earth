@@ -1,59 +1,66 @@
-import './PostForm.css';
 import { useState } from "react";
-import { createPost } from "../services/posts";
+import "./PostForm.css"; // Create this file for styling
 
+const PostForm = ({ onSubmit, token }) => {
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-function PostForm({ token, onPostCreated}) {
-    const [content, setContent] = useState('');
-    const [image, setImage] = useState(null)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!content.trim()) return;
 
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
-    };
-
-    const handlePostClick = async () => {
-        const formData = new FormData()
-            formData.append('content', content)
-            if (image) {
-                formData.append('image', image)
-    }
+    setIsSubmitting(true);
+    setError("");
 
     try {
-        await createPost(formData, token);
-        setContent('');
-        setImage(null);
-        if (onPostCreated) onPostCreated();
+      const formData = new FormData();
+      formData.append("content", content);
+      if (image) {
+        formData.append("image", image);
+      }
+
+      await onSubmit(formData, token);
+      setContent("");
+      setImage(null);
     } catch (err) {
-        console.error('Failed to create post:', err);
+      setError("Failed to create post");
+    } finally {
+      setIsSubmitting(false);
     }
-    };
+  };
 
-
-
-
-    return (
-        <div className="postFormContainer">
-        <h2>Create a new post</h2>
-        <form>
-            <label>Share your thoughts:
-            </label>
-            <textarea 
-            id='content' 
-            value={content} 
-            onChange={(e)=>setContent(e.target.value)} 
-            required
-            />
-                <label>Image(optional)</label>
-                <input id='image' type='file' onChange={handleImageChange}></input>
-                {image && (<div><p>You selected {image.name}</p></div>)}
-                <button type='button' onClick={handlePostClick}>
-                    Post
-                </button>
-        </form>
+  return (
+    <div className="post-form">
+      <h3>Create a Post</h3>
+      <form onSubmit={handleSubmit}>
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="What's on your mind?"
+          required
+        />
+        
+        <div className="form-group">
+          <label htmlFor="image-upload">Add Image (optional):</label>
+          <input
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+          {image && <p>Selected: {image.name}</p>}
         </div>
 
-    );
-}
+        {error && <p className="error">{error}</p>}
+        
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Posting..." : "Post"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
 export default PostForm;
-
-

@@ -12,7 +12,7 @@ import "../assets/styles/Nav.css";
 import { useEffect } from "react";
 import { useRef } from "react";
 
-const Nav = ({ logo, onSearch, users, addFriend }) => {
+const Nav = ({ logo, onSearch, users }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [showDropdownMenu, setShowDropdownMenu] = useState(false);
@@ -75,15 +75,15 @@ const Nav = ({ logo, onSearch, users, addFriend }) => {
     }
   };
 
-  const HandleAddfriend = async (friendId) => {
-    try {
-      await addFriend(friendId);
-      // This functionality should be moved out of search functionality
-      setShowSearchResults(false);
-    } catch (error) {
-      console.error("Could not add friend");
-    }
-  };
+  // const HandleAddfriend = async (friendId) => {
+  //   try {
+  //     await addFriend(friendId);
+  //     // This functionality should be moved out of search functionality
+  //     setShowSearchResults(false);
+  //   } catch (error) {
+  //     console.error("Could not add friend");
+  //   }
+  // };
 
   return (
     <nav className="nav">

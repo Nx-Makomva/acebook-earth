@@ -1,6 +1,7 @@
 const Post = require("../models/post");
 const { generateToken } = require("../lib/token");
-const User = require("../models/user")
+const User = require("../models/user");
+const Image = require("../models/imageSchema");
 
 async function getAllPosts(req, res) {
 try
@@ -27,21 +28,21 @@ try
 }};
 
 async function getPostsByFriend(friendId) {
-  const posts = await Post.find({ userId: friendId });
-  
-  // Get user data for each post's userId
-  const postsWithUsernames = await Promise.all(
-    posts.map(async (post) => {
-      const user = await User.findById(post.userId);
-      return {
-        ...post.toObject(),
-        username: user.name 
-      };
-    })
-  );
-  
-  return postsWithUsernames;
+  const posts = await Post.find({ userId: friendId })
+    .populate("images")
+    .populate("userId", "name");
+
+  return posts.map(post => ({
+    ...post.toObject(),
+    username: post.userId.name,
+    images: post.images.map(img => ({
+      ...img.toObject(),
+      // Convert Buffer to Base64 string
+      data: img.data ? img.data.toString('base64') : null
+    }))
+  }));
 }
+
 
 async function getFeed(req, res) {
   try {
@@ -59,7 +60,7 @@ async function getFeed(req, res) {
 
     // Flatten array of arrays into a single array of posts
     const allPosts = postsArrays.flat();
-
+    console.log("DATA FROM GET FEED:", allPosts)
     const token = generateToken(userId);
     res.status(200).json({ posts: allPosts, token });
   } catch (error) {
@@ -68,74 +69,128 @@ async function getFeed(req, res) {
   }
 }
 
-// async function createPost(req, res) {
-//   //we need an error handling
-//   try
-// {  const post = new Post(req.body);
-//   post.save();
-
-//   const newToken = generateToken(req.user_id);
-//   res.status(201).json({ message: "Post created", token: newToken });}
-//   catch (error){
-//   res.status(500).json({message: "It's not you, it's me", error})
-// }
-// }
-
-// async function createPost(req, res) {
-//   try {
-//     // Validate required fields
-//     if (req.body.content.trim().length === 0 && !req.body.image) {
-//       return res.status(400).json({ message: "Content or image required" });
-//     }
-    
-//     const post = new Post(req.body);
-//     await post.save(); // Add await here
-    
-//     const newToken = generateToken(req.user_id);
-//     res.status(201).json({ message: "Post created", token: newToken });
-//   } catch (error) {
-//     res.status(500).json({ message: "It's not you, it's me", error });
-//   }
-// }
 
 async function createPost(req, res) {
+  console.log("WE'RE IN CREATE POST", req.body, req.file);
   try {
-    const { content } = req.body;
-    const image = req.file ? req.file.filename : null;
-
-    if (!content && !image) {
-      return res.status(400).json({ message: 'Content or image required'});
+    const content = req.body.content || '';
+    
+    // Validate input
+    if (!content.trim() && !req.file) {
+      return res.status(400).json({ message: "Content or image required" });
     }
-    const post = new Post({
+
+    // Create new post with initialized images array
+    const newPost = new Post({
       content,
-      image,
-      createdAt: new Date()
+      userId: req.user_id,
+      likes: [],
+      images: [] // Initialize images array here
     });
 
-    await post.save();
+    // Handle image if present
+    let imageData = null;
+    if (req.file) {
+      const newImage = new Image({
+        name: req.file.originalname,
+        image: {
+          data: req.file.buffer,
+          contentType: req.file.mimetype
+        }
+      });
+      
+      await newImage.save();
+      newPost.images.push(newImage._id);
+      imageData = req.file.buffer.toString('base64');
+    }
 
+    await newPost.save();
+
+    // Generate new token
     const newToken = generateToken(req.user_id);
-    res.status(201).json({ message: 'Post created', post, token: newToken});
+
+    // Prepare response
+    const response = {
+      _id: newPost._id,
+      content: newPost.content,
+      userId: newPost.userId,
+      likes: newPost.likes,
+      createdAt: newPost.createdAt,
+      message: "Post created", 
+      token: newToken,
+      images: newPost.images.map(imgId => ({
+        _id: imgId,
+        image: {
+        ...(imageData && {
+          name: req.file.originalname,
+          contentType: req.file.mimetype,
+          data: imageData
+        })
+    }}))
+    };
+    console.log("DATA STRUCTURE CREATE POST:", response)
+    res.status(201).json(response);
+
   } catch (error) {
-    console.error('Error in createPost:', error);
-    res.status(500).json({ message: "It's not you, it's me", error});
+    console.error("Post creation error:", error);
+    res.status(500).json({ 
+      message: "Error creating post",
+      error: error.message 
+    });
   }
 }
 
 async function editPost(req, res) {
-  try
-{ const postId = req.params.postId;
-  const updatedPost = await Post.findByIdAndUpdate(postId, req.body,{
-    new: true
-  });
-  if (!updatedPost){
-    return res.status(404).json({message: 'Post not found.'});
+  try {
+    const postId = req.params.postId;
+    
+    // First validate post exists and belongs to user
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    if (post.userId.toString() !== req.user_id) {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    // Prepare update object
+    const update = {};
+    if (req.body.content) update.content = req.body.content;
+    
+    // Handle image if present
+    if (req.file) {
+      const image = new Image({
+        name: req.file.originalname,
+        image: {
+          data: req.file.buffer,
+          contentType: req.file.mimetype
+        }
+      });
+      await image.save();
+      update.$push = { images: image._id };
+    }
+
+    // Perform update
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId, 
+      update,
+      { new: true }
+    ).populate('images');
+
+    // Generate new token
+    const newToken = generateToken(req.user_id);
+
+    res.status(200).json({ 
+      post: updatedPost, 
+      token: newToken 
+    });
+  } catch (error) {
+    console.error("Post edit error:", error);
+    res.status(500).json({ 
+      message: "Error updating post",
+      error: error.message 
+    });
   }
-  const token = generateToken(req.user_id);
-  res.status(200).json({ posts: updatedPost, token: token });}
-  catch (error){
-  res.status(500).json({message: "It's not you, it's me", error})
-}
 }
 
 async function deletePost(req, res) {
@@ -283,6 +338,7 @@ const PostsController = {
   getComments: getComments,
   deleteComment: deleteComment,
   toggleLike: toggleLike,
+  getPostsByFriend: getPostsByFriend
 };
 
 module.exports = PostsController;

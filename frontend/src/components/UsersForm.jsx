@@ -1,9 +1,9 @@
-import "./UsersForm.css"
+import "../assets/styles/UsersForm.css"
 
 function UsersForm(props) {
     return (
         <div className="userFormContainer">
-        <h2>User Information</h2>
+        <h2>Your Details</h2>
         <form onSubmit={props.onSubmit}>
 
             {props.showName && (

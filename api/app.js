@@ -20,13 +20,13 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(cors());
 
 // Parse JSON request bodies, made available on `req.body`
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 // API Routes
-app.use("/users", usersUnprotectedRouter);
-app.use("/users", tokenChecker, usersProtectedRouter);
-app.use("/posts", tokenChecker, postsRouter);
-app.use("/tokens", authenticationRouter);
+app.use("/users", express.json(), usersUnprotectedRouter); // Only JSON here
+app.use("/users", express.json(), tokenChecker, usersProtectedRouter); // Only JSON here
+app.use("/posts", tokenChecker, postsRouter); // File uploads handled in routes
+app.use("/tokens", express.json(), authenticationRouter); // Only JSON here
 
 // 404 Handler
 app.use((_req, res) => {

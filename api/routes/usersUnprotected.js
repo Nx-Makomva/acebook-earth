@@ -11,6 +11,7 @@ router.post("/", UsersController.create);
 router.get("/", UsersController.getAllUsers);
 router.get("/search", UsersController.searchusers);
 router.get("/:id", UsersController.getById);
+router.get("/profile/activity/:id", UsersController.getUserPosts)
 
 router.post('/', tokenChecker, UsersController.getFriends);
 

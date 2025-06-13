@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserPlus } from "lucide-react";
+import Button from "../../components/Button";
 
 import UsersForm from "../../components/UsersForm"
 
@@ -39,8 +41,9 @@ export function LoginPage() {
   }
 
   return (
-    <>
-      <h2>Login</h2>
+    <div className="authPageWrapper">
+    <div className="userFormContainer">
+      <h2>Sign Up</h2>
       <UsersForm
         email={email}
         onEmailChange={handleEmailChange}
@@ -53,9 +56,16 @@ export function LoginPage() {
         onSubmit={handleSubmit}
         onCancel={handleCancel}
         />
-        <a href="/signup">
-        <button>Sign Up</button>
+        <div className="authLinkBtn">
+        <a href="/login">
+          <Button 
+            buttonText="Login"
+            buttonIcon={<UserPlus className="btn-icon" />}
+            optionalStyling="action-btn"
+          />
         </a>
-    </>
-  );
+      </div>
+    </div>
+  </div>
+);
 }

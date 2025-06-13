@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import UsersForm from "../../components/UsersForm"
+import UsersForm from "../../components/UsersForm";
+import { UserPlus } from "lucide-react";
+import Button from "../../components/Button";
 
 import { signup } from "../../services/authentication";
 
@@ -24,7 +26,7 @@ export function SignupPage() {
   }
 
   function handleCancel() {
-    navigate("/")
+    navigate("/");
   }
 
   function handleNameChange(event) {
@@ -40,28 +42,32 @@ export function SignupPage() {
   }
 
   return (
-    <>
-      <h2>Signup</h2>
-
-      <UsersForm
-        name={name}
-        onNameChange={handleNameChange}
-        showName={true}
-
-        email={email}
-        onEmailChange={handleEmailChange}
-        showEmail={true}
-
-        password={password}
-        onPasswordChange={handlePasswordChange} 
-        showPassword={true}
-
-        onSubmit={handleSubmit}
-        onCancel={handleCancel}
-      />
-      <a href="/login">
-        <button>Login</button>
-        </a>
-    </>
+    <div className="authPageWrapper">
+      <div className="userFormContainer">
+        <h2>Sign Up</h2>
+        <UsersForm
+          name={name}
+          onNameChange={handleNameChange}
+          showName={true}
+          email={email}
+          onEmailChange={handleEmailChange}
+          showEmail={true}
+          password={password}
+          onPasswordChange={handlePasswordChange}
+          showPassword={true}
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+        />
+        <div className="authLinkBtn">
+          <a href="/login">
+            <Button
+              buttonText="Login"
+              buttonIcon={<UserPlus className="btn-icon" />}
+              optionalStyling="action-btn"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -8,8 +8,12 @@ const UserSchema = new mongoose.Schema({
   bio: { type: String, required: false },
   dob: { type: Date, required: false },
   status: { type: String, required: false },
-  profilePicture: { type: String, required: false }, // assuming image URL as a placeholder
-  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false}] // might need reviewing
+  // profilePicture: { type: String, required: false }, // assuming image URL as a placeholder
+  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: false}], // might need reviewing
+  image : { type: mongoose.Schema.Types.ObjectId,
+      ref: 'Image',
+      required: false,
+    },
 });
 
 const User = mongoose.model("User", UserSchema);
