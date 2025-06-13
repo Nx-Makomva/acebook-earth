@@ -1,16 +1,18 @@
 import React from "react";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import { ProfilePage } from "../../pages/Profile/ProfilePage";
+import { ProfilePage } from "../../src/pages/Profile/ProfilePage";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
+import '@testing-library/jest-dom';
+
 
 // Mock services and components
-jest.mock("../../services/users", () => ({
+jest.mock("../../src/services/users", () => ({
   getById: jest.fn(),
   updateById: jest.fn(),
 }));
 
 
-import { getById, updateById } from "../../services/users";
+import { getById, updateById } from "../../src/services/users";
 
 const mockUser = {
   _id: "123",
@@ -25,6 +27,7 @@ describe("ProfilePage", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     localStorage.setItem("token", generateMockToken("123"));
+    getById.mockResolvedValue({ user: mockUser });
   });
 
   afterEach(() => {
@@ -59,6 +62,7 @@ describe("ProfilePage", () => {
   });
 
   it("renders 404 state when user not found", async () => {
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
     getById.mockRejectedValueOnce(new Error("Not Found"));
 
     renderWithRouter("999");
@@ -70,17 +74,20 @@ describe("ProfilePage", () => {
 
   it("renders own profile and allows editing name", async () => {
     getById.mockResolvedValueOnce({ user: mockUser });
+    updateById.mockResolvedValueOnce({
+    updatedUser: { name: "New Name" },
+  });
 
     renderWithRouter("123");
 
     await waitFor(() => {
       expect(screen.getByText("My Profile")).toBeInTheDocument();
-      expect(screen.getByText("Alice")).toBeInTheDocument();
+      expect(screen.getByText("Max")).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByLabelText("edit name"));
 
-    const input = screen.getByLabelText("editable-field");
+    const input = screen.getByRole("textbox");
     fireEvent.change(input, { target: { value: "New Name" } });
 
     fireEvent.click(screen.getByText("Submit"));
@@ -96,8 +103,8 @@ describe("ProfilePage", () => {
     renderWithRouter("456");
 
     await waitFor(() => {
-      expect(screen.getByText("Alice's Profile")).toBeInTheDocument();
-      expect(screen.getByText("Coding...")).toBeInTheDocument();
+      expect(screen.getByText("Max's Profile")).toBeInTheDocument();
+      expect(screen.getByText("Thinking about deleting the internet.")).toBeInTheDocument();
       expect(screen.queryByLabelText("edit name")).not.toBeInTheDocument();
     });
   });

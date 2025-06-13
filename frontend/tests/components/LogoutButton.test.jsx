@@ -1,11 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import LogoutButton from "../../components/LogoutButton";
-
-// Mock window.location.replace before tests
-const mockReplace = jest.fn();
-delete window.location;
-window.location = { replace: mockReplace };
+import LogoutButton from "../../src/components/LogoutButton";
 
 describe("LogoutButton", () => {
   beforeEach(() => {
@@ -25,7 +20,7 @@ describe("LogoutButton", () => {
     expect(screen.getByRole("button", { name: /logout/i })).toBeInTheDocument();
   });
 
-  it("clears storage and redirects on click", () => {
+  it("clears storage and dispatches authChange event on click", () => {
     render(<LogoutButton />);
     const button = screen.getByRole("button", { name: /logout/i });
 
@@ -33,7 +28,8 @@ describe("LogoutButton", () => {
 
     expect(localStorage.getItem("token")).toBeNull();
     expect(sessionStorage.getItem("something")).toBeNull();
-    expect(window.dispatchEvent).toHaveBeenCalledWith(expect.any(Event));
-    expect(mockReplace).toHaveBeenCalledWith("/");
+    expect(window.dispatchEvent).toHaveBeenCalledWith(
+      expect.objectContaining({ type: "authChange" })
+    );
   });
 });

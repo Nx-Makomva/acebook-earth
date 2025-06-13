@@ -1,9 +1,14 @@
+jest.mock("../../src/services/likes", () => ({
+  handleLikeRequest: jest.fn(() => Promise.resolve({ liked: true, likesCount: 0 })),
+}));
+
+
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import LikeButton from "../../components/LikeButton";
-import { handleLikeRequest } from "../../services/likes";
+import LikeButton from "../../src/components/LikeButton";
+import { handleLikeRequest } from "../../src/services/likes";
 
-jest.mock("../../services/likes", () => ({
+jest.mock("../../src/services/likes", () => ({
   handleLikeRequest: jest.fn(),
 }));
 

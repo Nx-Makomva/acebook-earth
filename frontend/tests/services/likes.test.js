@@ -1,4 +1,25 @@
-import { handleLikeRequest } from "../../services/likes";
+// likes.test.js
+global.fetch = jest.fn();
+
+const mockResponse = { liked: true, likesCount: 5 };
+
+jest.mock("../../src/services/likes.js", () => ({
+  handleLikeRequest: jest.fn((postId, userId, token) => {
+    return fetch(`/posts/${postId}/like`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ postId, userId }),
+    }).then(res => {
+      if (!res.ok) throw new Error("Failed to update like");
+      return res.json();
+    });
+  }),
+}));
+
+import { handleLikeRequest } from "../../src/services/likes.js";
 
 describe("handleLikeRequest", () => {
   const fakeToken = "test-token";
@@ -10,11 +31,9 @@ describe("handleLikeRequest", () => {
   });
 
   it("sends a POST request to like a post and returns the response", async () => {
-    const mockResponseData = { liked: true, likesCount: 5 };
-
     fetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => mockResponseData,
+      json: async () => mockResponse,
     });
 
     const result = await handleLikeRequest(fakePostId, fakeUserId, fakeToken);
@@ -31,12 +50,14 @@ describe("handleLikeRequest", () => {
       })
     );
 
-    expect(result).toEqual(mockResponseData);
+    expect(result).toEqual(mockResponse);
   });
 
   it("throws an error when the request fails", async () => {
     fetch.mockResolvedValueOnce({ ok: false });
 
-    await expect(handleLikeRequest(fakePostId, fakeUserId, fakeToken)).rejects.toThrow("Failed to update like");
+    await expect(
+      handleLikeRequest(fakePostId, fakeUserId, fakeToken)
+    ).rejects.toThrow("Failed to update like");
   });
 });

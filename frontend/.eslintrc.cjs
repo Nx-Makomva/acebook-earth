@@ -20,6 +20,16 @@ module.exports = {
   },
   // Test Settings
   overrides: [
+    // CommonJS supports for .cjs files (babel.config.cjs)
+    {
+      files: ["*.cjs"],
+      env: {
+        node: true,
+      },
+      parserOptions: {
+        sourceType: "script",
+      },
+    },
     {
       env: { jest: true },
       files: ["tests/**"],

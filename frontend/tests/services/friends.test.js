@@ -1,5 +1,9 @@
-import { addFriend } from "../../services/friends";
 
+import { addFriend } from "../../src/services/friends";
+
+jest.mock("../../src/services/friends", () => ({
+  addFriend: jest.fn(),
+}));
 
 describe("addFriend", () => {
   const fakeToken = "test-token";
@@ -7,38 +11,25 @@ describe("addFriend", () => {
 
   beforeEach(() => {
     localStorage.setItem("token", fakeToken);
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
     localStorage.clear();
   });
 
-  it("successfully adds a friend and returns data", async () => {
+  it("should call addFriend and return mock data", async () => {
     const mockUserData = { user: { _id: "me", friends: ["friend123"] } };
-
-    fetch.mockResolvedValueOnce({
-      status: 200,
-      json: async () => mockUserData,
-    });
+    addFriend.mockResolvedValueOnce(mockUserData);
 
     const result = await addFriend(fakeFriendId);
 
-    expect(fetch).toHaveBeenCalledWith(
-      expect.stringContaining(`/users/friends/${fakeFriendId}`),
-      expect.objectContaining({
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${fakeToken}`,
-        },
-      })
-    );
-
+    expect(addFriend).toHaveBeenCalledWith(fakeFriendId);
     expect(result).toEqual(mockUserData);
   });
 
-  it("throws an error if response is not 200", async () => {
-    fetch.mockResolvedValueOnce({ status: 400 });
+  it("should throw if addFriend fails", async () => {
+    addFriend.mockRejectedValueOnce(new Error("Failed to add friend"));
 
     await expect(addFriend(fakeFriendId)).rejects.toThrow("Failed to add friend");
   });

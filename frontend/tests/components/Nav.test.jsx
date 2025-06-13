@@ -1,6 +1,6 @@
 
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import Nav from "../../components/Nav";
+import Nav from "../../src/components/Nav";
 
 const mockUsers = [
   { _id: "1", name: "max" },
@@ -46,7 +46,7 @@ describe("Nav", () => {
     fireEvent.focus(input);
 
     await waitFor(() => {
-      expect(screen.getByText("max")).toBeInTheDocument();
+      expect(screen.getByText(/max/i)).toBeInTheDocument();
     });
   });
 

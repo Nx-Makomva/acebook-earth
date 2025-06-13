@@ -1,6 +1,6 @@
 
 import { render, screen, fireEvent } from "@testing-library/react";
-import UsersForm from "../../components/UsersForm";
+import UsersForm from "../../src/components/UsersForm";
 
 describe("UsersForm", () => {
   const mockProps = {
@@ -69,8 +69,9 @@ describe("UsersForm", () => {
   });
 
   it("calls onSubmit when the form is submitted", () => {
-    render(<UsersForm {...mockProps} />);
-    const form = screen.getByRole("form", { hidden: true }) || screen.getByRole("form");
+    // render(<UsersForm {...mockProps} />);
+    const { container } = render(<UsersForm {...mockProps} />);
+    const form = container.querySelector("form");
 
     fireEvent.submit(form);
     expect(mockProps.onSubmit).toHaveBeenCalled();

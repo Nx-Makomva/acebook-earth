@@ -1,31 +1,27 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { vi } from "vitest";
 
-import { useNavigate } from "react-router-dom";
 import { login } from "../../src/services/authentication";
-
 import { LoginPage } from "../../src/pages/Login/LoginPage";
+import { mockNavigate } from "react-router-dom";
 
-// Mocking React Router's useNavigate function
-vi.mock("react-router-dom", () => {
-  const navigateMock = vi.fn();
-  const useNavigateMock = () => navigateMock; // Create a mock function for useNavigate
-  return { useNavigate: useNavigateMock };
+jest.mock("react-router-dom", () => {
+  const mockNavigate = jest.fn();
+  return {
+    useNavigate: () => mockNavigate,
+    __esModule: true,
+    mockNavigate,
+  };
 });
 
-// Mocking the login service
-vi.mock("../../src/services/authentication", () => {
-  const loginMock = vi.fn();
-  return { login: loginMock };
-});
+jest.mock("../../src/services/authentication", () => ({
+  login: jest.fn(),
+}));
 
-// Reusable function for filling out login form
 async function completeLoginForm() {
   const user = userEvent.setup();
-
-  const emailInputEl = screen.getByLabelText("Email:");
-  const passwordInputEl = screen.getByLabelText("Password:");
+  const emailInputEl = screen.getByLabelText(/email/i);
+  const passwordInputEl = screen.getByLabelText(/password/i);
   const submitButtonEl = screen.getByRole("submit-button");
 
   await user.type(emailInputEl, "test@email.com");
@@ -35,36 +31,40 @@ async function completeLoginForm() {
 
 describe("Login Page", () => {
   beforeEach(() => {
-    vi.resetAllMocks();
+    jest.resetAllMocks();
   });
 
   test("allows a user to login", async () => {
-    render(<LoginPage />);
+    login.mockResolvedValue({ token: "abc", userId: "123" });
 
+    render(<LoginPage />);
     await completeLoginForm();
 
     expect(login).toHaveBeenCalledWith("test@email.com", "1234");
   });
 
   test("navigates to /posts on successful login", async () => {
+    login.mockResolvedValue({
+      token: "secrettoken123",
+      userId: "user123",
+    });
+
     render(<LoginPage />);
-
-    login.mockResolvedValue("secrettoken123");
-    const navigateMock = useNavigate();
-
     await completeLoginForm();
 
-    expect(navigateMock).toHaveBeenCalledWith("/posts");
+    expect(mockNavigate).toHaveBeenCalledWith("/posts/feed/user123");
   });
 
   test("navigates to /login on unsuccessful login", async () => {
-    render(<LoginPage />);
+  login.mockRejectedValue(new Error("Error logging in"));
+  const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
-    login.mockRejectedValue(new Error("Error logging in"));
-    const navigateMock = useNavigate();
+  render(<LoginPage />);
+  await completeLoginForm();
 
-    await completeLoginForm();
+  expect(mockNavigate).toHaveBeenCalledWith("/login");
 
-    expect(navigateMock).toHaveBeenCalledWith("/login");
-  });
+  consoleSpy.mockRestore();
+});
+
 });

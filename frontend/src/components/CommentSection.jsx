@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getComments, addComment } from '../services/comments';
 // import { getCurrentUser } from '../services/authentication';
 
+
 function CommentSection({ postId }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');

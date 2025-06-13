@@ -1,18 +1,28 @@
-
+import React from "react";
 import { render, screen } from "@testing-library/react";
-import Post from "../../components/Post";
 
+jest.mock("../../src/components/LikeButton", () => ({
+  __esModule: true,
+  default: () => <div>LikeButton</div>,
+}));
+
+jest.mock("../../src/components/CommentSection", () => ({
+  __esModule: true,
+  default: () => <div>CommentSection</div>,
+}));
+
+import Post from "../../src/components/Post";
+
+const basePost = {
+  _id: "123",
+  content: "This is a test post",
+  username: "Max",
+  image: [],
+  comments: [],
+  likes: [],
+};
 
 describe("Post", () => {
-  const basePost = {
-    _id: "123",
-    content: "This is a test post",
-    username: "Max",
-    image: [],
-    comments: [],
-    likes: [],
-  };
-
   test("renders content and username", () => {
     render(<Post post={basePost} />);
     expect(screen.getByText("Max")).toBeInTheDocument();
@@ -26,7 +36,7 @@ describe("Post", () => {
   });
 
   test("renders base64 image if image data is provided", () => {
-    const imageBuffer = new Uint8Array([72, 101, 108, 108, 111]); // 'Hello'
+    const imageBuffer = new Uint8Array([72, 101, 108, 108, 111]); // "Hello" in ASCII
     const postWithImage = {
       ...basePost,
       image: [
