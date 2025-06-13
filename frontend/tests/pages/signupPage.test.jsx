@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { vi } from "vitest";
 
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../src/services/authentication";
@@ -8,15 +7,15 @@ import { signup } from "../../src/services/authentication";
 import { SignupPage } from "../../src/pages/Signup/SignupPage";
 
 // Mocking React Router's useNavigate function
-vi.mock("react-router-dom", () => {
-  const navigateMock = vi.fn();
+jest.mock("react-router-dom", () => {
+  const navigateMock = jest.fn();
   const useNavigateMock = () => navigateMock; // Create a mock function for useNavigate
   return { useNavigate: useNavigateMock };
 });
 
 // Mocking the signup service
-vi.mock("../../src/services/authentication", () => {
-  const signupMock = vi.fn();
+jest.mock("../../src/services/authentication", () => {
+  const signupMock = jest.fn();
   return { signup: signupMock };
 });
 
@@ -24,8 +23,8 @@ vi.mock("../../src/services/authentication", () => {
 async function completeSignupForm() {
   const user = userEvent.setup();
 
-  const emailInputEl = screen.getByLabelText("Email:");
-  const passwordInputEl = screen.getByLabelText("Password:");
+  const emailInputEl = screen.getByLabelText(/email/i);
+  const passwordInputEl = screen.getByLabelText(/password/i);
   const submitButtonEl = screen.getByRole("submit-button");
 
   await user.type(emailInputEl, "test@email.com");
@@ -35,7 +34,7 @@ async function completeSignupForm() {
 
 describe("Signup Page", () => {
   beforeEach(() => {
-    vi.resetAllMocks();
+    jest.resetAllMocks();
   });
 
   test("allows a user to signup", async () => {
@@ -43,7 +42,7 @@ describe("Signup Page", () => {
 
     await completeSignupForm();
 
-    expect(signup).toHaveBeenCalledWith("test@email.com", "1234");
+    expect(signup).toHaveBeenCalledWith("", "test@email.com", "1234");
   });
 
   test("navigates to /login on successful signup", async () => {
@@ -57,13 +56,18 @@ describe("Signup Page", () => {
   });
 
   test("navigates to /signup on unsuccessful signup", async () => {
-    render(<SignupPage />);
+  const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+  
+  signup.mockRejectedValue(new Error("Error signing up"));
 
-    signup.mockRejectedValue(new Error("Error signing up"));
-    const navigateMock = useNavigate();
+  render(<SignupPage />);
+  const navigateMock = useNavigate();
 
-    await completeSignupForm();
+  await completeSignupForm();
 
-    expect(navigateMock).toHaveBeenCalledWith("/signup");
-  });
+  expect(navigateMock).toHaveBeenCalledWith("/signup");
+
+  consoleSpy.mockRestore();
+});
+
 });

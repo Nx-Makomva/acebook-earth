@@ -1,13 +1,70 @@
+import React from "react";
 import { render, screen } from "@testing-library/react";
+
+jest.mock("../../src/components/LikeButton", () => ({
+  __esModule: true,
+  default: () => <div>LikeButton</div>,
+}));
+
+jest.mock("../../src/components/CommentSection", () => ({
+  __esModule: true,
+  default: () => <div>CommentSection</div>,
+}));
 
 import Post from "../../src/components/Post";
 
-describe("Post", () => {
-  test("displays the message as an article", () => {
-    const testPost = { _id: "123", message: "test message" };
-    render(<Post post={testPost} />);
+const basePost = {
+  _id: "123",
+  content: "This is a test post",
+  username: "Max",
+  image: [],
+  comments: [],
+  likes: [],
+};
 
-    const article = screen.getByRole("article");
-    expect(article.textContent).toBe("test message");
+describe("Post", () => {
+  test("renders content and username", () => {
+    render(<Post post={basePost} />);
+    expect(screen.getByText("Max")).toBeInTheDocument();
+    expect(screen.getByText("This is a test post")).toBeInTheDocument();
+  });
+
+  test("renders LikeButton and CommentSection", () => {
+    render(<Post post={basePost} />);
+    expect(screen.getByText("LikeButton")).toBeInTheDocument();
+    expect(screen.getByText("CommentSection")).toBeInTheDocument();
+  });
+
+  test("renders base64 image if image data is provided", () => {
+    const imageBuffer = new Uint8Array([72, 101, 108, 108, 111]); // "Hello" in ASCII
+    const postWithImage = {
+      ...basePost,
+      image: [
+        {
+          image: {
+            data: { data: imageBuffer },
+            contentType: "image/png",
+          },
+          name: "test image",
+        },
+      ],
+    };
+
+    render(<Post post={postWithImage} />);
+    const img = screen.getByRole("img");
+    expect(img).toHaveAttribute("src", expect.stringContaining("data:image/png;base64,"));
+    expect(img).toHaveAttribute("alt", "test image");
+  });
+
+  test("returns null if no content or image", () => {
+    const emptyPost = { _id: "123", content: "", image: [] };
+    const { container } = render(<Post post={emptyPost} />);
+    expect(container.firstChild).toBeNull();
+  });
+
+  test("returns null if content is just whitespace and image is missing", () => {
+    const whitespacePost = { _id: "123", content: "   ", image: [] };
+    const { container } = render(<Post post={whitespacePost} />);
+    expect(container.firstChild).toBeNull();
   });
 });

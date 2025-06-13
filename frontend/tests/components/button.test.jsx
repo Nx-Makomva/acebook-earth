@@ -1,5 +1,8 @@
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Button from "../../src/components/Button";
+import '@testing-library/jest-dom';
+
 
 describe("Button component", () => {
     //will check that our button apprears on the screen with the Click me child (text).
@@ -37,7 +40,36 @@ describe("Button component", () => {
         const button = screen.getByLabelText("like-post");
         expect(button).toBeInTheDocument();
     });
+
 });
+
+    it("does not call onClick handler when disabled", () => {
+    const handleClick = jest.fn();
+    render(<Button onClick={handleClick} disabled>Can't Click</Button>);
+    fireEvent.click(screen.getByText("Can't Click"));
+    expect(handleClick).not.toHaveBeenCalled();
+});
+
+    it("renders with the correct type attribute", () => {
+    render(<Button type="submit">Submit</Button>);
+    const button = screen.getByText("Submit");
+    expect(button).toHaveAttribute("type", "submit");
+});
+
+    it("renders and does not error if no onClick is provided", () => {
+    render(<Button>Clickless</Button>);
+    const button = screen.getByText("Clickless");
+    fireEvent.click(button); // should not throw even without handler
+    expect(button).toBeInTheDocument();
+});
+
+    it("warns in console for invalid variant prop", () => {
+    const spy = jest.spyOn(console, "error").mockImplementation(() => {});
+    render(<Button variant="invalid">Oops</Button>);
+    expect(spy).toHaveBeenCalled();
+    spy.mockRestore();
+});
+
 
 //render -displays the componet in our test
 //screen accessed elements in the rendered output

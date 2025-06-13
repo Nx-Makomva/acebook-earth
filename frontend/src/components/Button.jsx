@@ -1,4 +1,6 @@
 import PropTypes from "prop-types";
+import '@testing-library/jest-dom';
+
 
 const Button = ({ 
     variant = "default", 
