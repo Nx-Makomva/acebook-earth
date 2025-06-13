@@ -14,6 +14,7 @@ import Logo from "../src/assets/images/acebook_logo.png";
 
 import { useState } from "react";
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast"; 
 
 // docs: https://reactrouter.com/en/main/start/overview
 
@@ -92,12 +93,34 @@ function App() {
 
   return (
     <>
+    <Toaster 
+    position="top-center"
+    toastOptions={{
+    style: {
+      background: '#1f2937',
+      color: '#f9fafb',
+      borderRadius: '10px',
+      fontSize: '0.9rem',
+    },
+    success: {
+      iconTheme: {
+        primary: '#10b981',
+        secondary: '#f0fdf4',
+      },
+    },
+    error: {
+      iconTheme: {
+        primary: '#ef4444',
+        secondary: '#fef2f2',
+      },
+    },
+  }}
+    />
       {isAuthenticated && (
         <Nav
           logo={logo}
           onSearch={searchDatabase}
           users={users}
-          addFriend={HandleAddfriend}
         />
       )}
       <RouterProvider router={router} />

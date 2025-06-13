@@ -1,4 +1,62 @@
-.home {
-  display: flex;
-  flex-direction: column;
+.homepageContainer {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-align: center;
 }
+
+.homepageContainer::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" fill-opacity="0.05"/><circle cx="75" cy="25" r="1" fill="white" fill-opacity="0.03"/><circle cx="50" cy="50" r="1" fill="white" fill-opacity="0.04"/><circle cx="25" cy="75" r="1" fill="white" fill-opacity="0.02"/><circle cx="75" cy="75" r="1" fill="white" fill-opacity="0.06"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  pointer-events: none;
+  z-index: 0;
+}
+
+.homepageContainer > * {
+  position: relative;
+  z-index: 1;
+}
+
+.homepageContainer:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+}
+
+.homepageContainer h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #1f2937;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+.homepageContainer p {
+  font-size: 1.1rem;
+  color: #4b5563;
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.linkGroup {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* space between buttons */
+}
+
+

@@ -43,6 +43,7 @@ async function getPostsByFriend(friendId) {
   }));
 }
 
+
 async function getFeed(req, res) {
   try {
     const userId = req.params.userId; 
@@ -336,6 +337,7 @@ const PostsController = {
   getComments: getComments,
   deleteComment: deleteComment,
   toggleLike: toggleLike,
+  getPostsByFriend: getPostsByFriend
 };
 
 module.exports = PostsController;

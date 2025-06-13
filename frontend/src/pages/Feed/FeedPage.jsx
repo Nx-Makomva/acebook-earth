@@ -5,7 +5,6 @@ import { getFeed, createPost } from "../../services/posts";
 import Post from "../../components/Post";
 import PostForm from "../../components/PostForm";
 
-
 export function FeedPage({ refreshTrigger }) {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
