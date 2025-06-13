@@ -1,15 +1,24 @@
 .userFormContainer {
-max-width: 500px;
-margin: 0 auto;
-padding: 2rem;
+/* max-width: 1200px; */
+width: 100%;
+min-width: 300px;
+/* margin: auto; */
+margin-right: 20000px;
+padding: 1.5rem;
 background: rgba(255, 255, 255, 0.95);
 backdrop-filter: blur(20px);
 border-radius: 24px;
 box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
 border: 1px solid rgba(255, 255, 255, 0.3);
-position: relative;
+position: center;
 overflow: hidden;
 transition: all 0.3s ease;
+}
+
+.authPageWrapper {
+	width: 90vh ;
+	padding: 1.5rem;
+	flex-wrap: wrap;
 }
 
 .userFormContainer::before {
@@ -61,8 +70,12 @@ border-radius: 2px;
 
 .userFormContainer form {
 display: flex;
+flex-wrap: wrap;
 flex-direction: column;
 gap: 1.5rem;
+margin: 5%;
+padding: 15px;
+align-items: center;
 }
 
 .userFormContainer label {
