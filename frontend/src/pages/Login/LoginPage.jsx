@@ -43,7 +43,7 @@ export function LoginPage() {
   return (
     <div className="authPageWrapper">
     <div className="userFormContainer">
-      <h2>Sign Up</h2>
+      <h2>Login</h2>
       <UsersForm
         email={email}
         onEmailChange={handleEmailChange}
@@ -57,9 +57,9 @@ export function LoginPage() {
         onCancel={handleCancel}
         />
         <div className="authLinkBtn">
-        <a href="/login">
+        <a href="/signup">
           <Button 
-            buttonText="Login"
+            buttonText="Sign Up!"
             buttonIcon={<UserPlus className="btn-icon" />}
             optionalStyling="action-btn"
           />
