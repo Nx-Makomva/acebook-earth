@@ -1,5 +1,4 @@
-/* Post Component Styles - Fixed Size Layout */
-
+/* Post Container - Fixed Size Layout */
 .post-container {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
@@ -9,12 +8,11 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   /* Fixed dimensions */
   width: 100%;
   max-width: 500px;
   min-height: 400px;
-  max-height: 600px;
   display: flex;
   flex-direction: column;
 }
@@ -130,7 +128,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   min-height: 0;
 }
 
@@ -329,6 +326,15 @@
   max-height: 300px;
   overflow-y: auto;
   flex-shrink: 0;
+  display: block;
+}
+
+.comment-section.hidden {
+  display: none;
+}
+
+.comment-section.visible {
+  display: block;
 }
 
 /* Comment Form */
