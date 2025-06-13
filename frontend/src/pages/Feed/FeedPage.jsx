@@ -34,9 +34,9 @@ export function FeedPage({ refreshTrigger }) {
   const handleCreatePost = async (formData) => {
     try {
       const newPost = await createPost(formData, token);
-      setPosts([newPost, ...posts]); // Add new post at the beginning
+      setPosts([newPost, ...posts]);
     } catch (err) {
-      throw err; // Let PostForm handle the error
+      throw err;
     }
   };
 
