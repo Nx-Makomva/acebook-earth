@@ -59,7 +59,7 @@ async function getFeed(req, res) {
 
     // Flatten array of arrays into a single array of posts
     const allPosts = postsArrays.flat();
-
+    console.log("DATA FROM GET FEED:", allPosts)
     const token = generateToken(userId);
     res.status(200).json({ posts: allPosts, token });
   } catch (error) {
@@ -119,14 +119,15 @@ async function createPost(req, res) {
       token: newToken,
       images: newPost.images.map(imgId => ({
         _id: imgId,
+        image: {
         ...(imageData && {
           name: req.file.originalname,
           contentType: req.file.mimetype,
           data: imageData
         })
-      }))
+    }}))
     };
-
+    console.log("DATA STRUCTURE CREATE POST:", response)
     res.status(201).json(response);
 
   } catch (error) {
