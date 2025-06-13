@@ -27,21 +27,14 @@ try
 }};
 
 async function getPostsByFriend(friendId) {
-  const posts = await Post.find({ userId: friendId });
+  const posts = await Post.find({ userId: friendId }).populate('userId', 'name');
   
-  // Get user data for each post's userId
-  const postsWithUsernames = await Promise.all(
-    posts.map(async (post) => {
-      const user = await User.findById(post.userId);
-      return {
-        ...post.toObject(),
-        username: user.name 
-      };
-    })
-  );
-  
-  return postsWithUsernames;
+  return posts.map(post => ({
+    ...post.toObject(),
+    username: post.userId.name
+  }));
 }
+
 
 async function getFeed(req, res) {
   try {
@@ -259,6 +252,7 @@ const PostsController = {
   getComments: getComments,
   deleteComment: deleteComment,
   toggleLike: toggleLike,
+  getPostsByFriend: getPostsByFriend
 };
 
 module.exports = PostsController;

@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const { generateToken } = require("../lib/token");
 const Post = require("../models/post");
+const { getPostsByFriend } = require("./posts");
 
 function create(req, res) {
   const email = req.body.email;
@@ -133,6 +134,16 @@ async function addFriend(req, res) {
       }
     );
 
+    const updatedFriend = await User.findByIdAndUpdate(
+      friendId,
+      { $addToSet: { friends: userId } }, // $addToSet prevents duplicates
+      {
+        new: true,
+        runValidators: true,
+        select: "name friends",
+      }
+    )
+
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -140,7 +151,9 @@ async function addFriend(req, res) {
     res.status(200).json({
       message: "Friend added successfully",
       user: updatedUser,
+      friend: updatedFriend
     });
+
   } catch (error) {
     res.status(500).json({
       message: "Error adding friend",
@@ -160,6 +173,34 @@ async function getFriends(req, res) {
     res.status(200).json({ friends: user.friends });
   } catch (error) {
     console.error('Error fetching friends:', error);
+    res.status(500).json({ message: 'Server error'});
+  }
+} // ^^^ Not sure if anyone is using this specifically so didn't touch it
+
+async function getAllFriends(req, res) {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id).populate('friends', 'name status');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found'});
+    }
+    res.status(200).json({ friends: user.friends });
+  } catch (error) {
+    console.error('Error fetching friends:', error);
+    res.status(500).json({ message: 'Server error'});
+  }
+}
+
+async function getUserPosts(req, res) {
+  try {
+    const posts = await getPostsByFriend(req.params.id);
+    res.json({
+      posts,
+      postCount: posts.length
+    })
+  } catch (error) {
+    console.error('Error fetching user posts:', error);
     res.status(500).json({ message: 'Server error'});
   }
 }
@@ -204,6 +245,8 @@ const UsersController = {
   deleteUserById: deleteUserById,
   getFriends: getFriends,
   searchusers: searchusers,
+  getAllFriends: getAllFriends,
+  getUserPosts: getUserPosts
 };
 
 module.exports = UsersController;

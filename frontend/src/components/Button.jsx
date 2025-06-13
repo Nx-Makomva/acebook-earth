@@ -1,13 +1,14 @@
-import React from "react";
 import PropTypes from "prop-types";
 
 const Button = ({ 
     variant = "default", 
     onClick, 
-    children, 
+    buttonText,
+    buttonIcon,
     disabled, 
     type = "button", 
-    ariaLabel, 
+    ariaLabel,
+    optionalStyling
 }) => {
     const baseStyle = 
         "px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
@@ -25,13 +26,13 @@ const Button = ({
         <button 
             type={type}
             onClick={onClick} 
-            className={finalStyle} 
+            className={optionalStyling ? optionalStyling : finalStyle} 
             disabled={disabled}
             aria-label={ariaLabel}
         >
             {/* applies all the syling */}
-
-            {children} 
+            {buttonIcon}
+            {buttonText} 
             {/* shows the text content (children) we pass in */}
         </button>
     );
